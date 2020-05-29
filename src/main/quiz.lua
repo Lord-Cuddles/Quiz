@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 22"
+version = "1.0 alpha 23"
 args = {...}
 if args[1] == "version" then
     return version
@@ -87,6 +87,7 @@ function screenSelect()
             term.setTextColor(colours.lightGrey)
         end
         midPrint("Leave Game")
+        print()
         term.setTextColor(colours.grey)
         midPrint("Press <tab> to force reinstall * "..version, true)
         local event, key = os.pullEvent("key")
@@ -170,7 +171,7 @@ function showLog(topic, logtable, index)
     term.setTextColor(colours.orange)
     write("Question: ")
     term.setTextColor(colours.white)
-    print(q)
+    print(q.."?")
     term.setTextColor(colours.orange)
     write("Answer: ")
     if tostring(c) == "true" then
@@ -178,13 +179,12 @@ function showLog(topic, logtable, index)
     else
         term.setTextColor(colours.red)
     end
+    print(a)
 end
 
 local example_log = {}
 print(type(example_log))
-os.pullEvent("char")
 example_log = addLog(example_log, "What is your name", "George", true)
-print(type(example_log))
 showLog("Test", example_log, 1)
 os.pullEvent("char")
 
