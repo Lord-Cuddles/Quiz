@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 29"
+version = "1.0 alpha 30"
 args = {...}
 if args[1] == "version" then
     return version
