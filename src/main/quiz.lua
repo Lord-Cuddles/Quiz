@@ -66,7 +66,7 @@ function screenSelect()
             else
                 term.setTextColor(colours.lightGrey)
             end
-            if specialists[players[p]] = true then
+            if specialists[players[p]] == true then
                 midPrint("[Done] "..players[p].."'s topic")
             else
                 midPrint(players[p].."'s topic")
