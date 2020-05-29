@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 34"
+version = "1.0 alpha 35"
 args = {...}
 if args[1] == "version" then
     return version
@@ -184,9 +184,9 @@ function askQuestion(quizname, qid, q, a, p)
     end
 end
 
-local response = askQuestion("General Knowledge", 1, "What is the capital city of the United Kingdom", "London", "George")
+--[[local response = askQuestion("General Knowledge", 1, "What is the capital city of the United Kingdom", "London", "George")
 print(response)
-os.pullEvent("mouse_click")
+os.pullEvent("mouse_click")]]
 
 function getQandA(t)
     local sep = string.find(t, "|")
