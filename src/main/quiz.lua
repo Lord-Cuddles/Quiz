@@ -1,9 +1,11 @@
 -- Scores
-version = "1.0 alpha 30"
+version = "1.0 alpha 32"
 args = {...}
 if args[1] == "version" then
     return version
 end
+
+local xSize, ySize = term.getSize()
 
 term.setBackgroundColor(colours.black)
 term.setTextColor(colours.red)
@@ -141,6 +143,7 @@ function askQuestion(quizname, qid, q, a, p)
         term.setBackgroundColor(colours.yellow)
         term.clearLine()
         midPrint(p.."'s quiz: "..quizname)
+        term.setBackgroundColor(colours.black)
         term.setCursorPos(1,3)
         term.setTextColor(colours.orange)
         write("Question "..qid..": ")
