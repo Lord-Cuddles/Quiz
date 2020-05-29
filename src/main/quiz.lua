@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 28"
+version = "1.0 alpha 29"
 args = {...}
 if args[1] == "version" then
     return version
@@ -66,7 +66,11 @@ function screenSelect()
             else
                 term.setTextColor(colours.lightGrey)
             end
-            midPrint(players[p].."'s topic")
+            if specialists[players[p]] = true then
+                midPrint("[Done] "..players[p].."'s topic")
+            else
+                midPrint(players[p].."'s topic")
+            end
             print()
         end
         if sel == #players + 2 then
@@ -130,11 +134,41 @@ function screenSelect()
     end
 end
 
-function specialist()
-    
+function askQuestion(quizname, qid, q, a, p)
+    while true do
+        term.setCursorPos(1,1)
+        term.setTextColor(colours.black)
+        term.setBackgroundColor(colours.yellow)
+        term.clearLine()
+        midPrint(p.."'s quiz: "..quizname)
+        term.setCursorPos(1,3)
+        term.setTextColor(colours.orange)
+        write("Question "..qid..": ")
+        term.setTextColor(colours.white)
+        print(q.."?")
+        print()
+        term.setTextColor(colours.orange)
+        write("Answer: ")
+        term.setTextColor(colours.yellow)
+        print(a)
+        print()
+        term.setTextColor(colours.grey)
+        term.setCursorPos(1,ySize-1)
+        print("Press <enter> key for correct answer")
+        print("Press <backspace> key for wrong answer")
+        local event, key = os.pullEvent("key")
+        if key == keys.enter then
+            return q.."|"..a.."|true"
+        elseif key == keys.backspace then
+            return q.."|"..a.."|false"
+        end
+    end
 end
 
-example_question = "What is the capital of England|London"
+local response = askQuestion("General Knowledge", 1, "What is the capital city of the United Kingdom?", "London", "George")
+print(response)
+os.pullEvent("mouse_click")
+
 function getQandA(t)
     local sep = string.find(t, "|")
     local q = string.sub(t, 1, sep-1)
@@ -202,10 +236,10 @@ function showLog(topic, logtable, index)
     print(a)
 end
 
-local example_log = {}
+--[[local example_log = {}
 example_log = addLog(example_log, "What is your name", "George", true)
 showLog("Test", example_log, 1)
-os.pullEvent("mouse_click")
+]]--
 
 function general()
     
