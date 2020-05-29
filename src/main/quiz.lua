@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 40d"
+version = "1.0 alpha 41"
 args = {...}
 if args[1] == "version" then
     return version
@@ -234,36 +234,19 @@ function general()
                     term.setTextColor(colours.white)
                 end
                 
-                print("test")
-                --[[local suffix = ""
-                if generals[players[p] ] == true then
-                    if sel == p then
-                        term.setTextColor(colours.red)
-                    else
-                        term.setTextColor(colours.grey)
-                    end
-                    suffix = " (done)"
-                elseif sel == p then
-                    term.setTextColor(colours.green)
-                else
-                    term.setTextColor(colours.white)
-                end
                 write("  "..players[p]..suffix)
                 term.setTextColor(colours.lightGrey)
                 write(": ")
-                term.setTextColor(colours.white)
-                print(scores[players[p] ])
+                term.setTextColor(colours.yellow)
+                print(scores[players[p]])
                 print()
-                if sel == #players + 1 then
-                    term.setTextColor(colours.white)
-                else
-                    term.setTextColor(colours.grey)
-                end
-                print("  Back to menu")
-                term.setCursorPos(1,ySize-2)
-                term.setTextColor(colours.grey)
-                ]]--
             end
+            if sel == #players + 1 then
+                term.setTextColor(colours.green)
+            else
+                term.setTextColor(colours.lightGrey)
+            end
+            print("  Return to menu")
             if sel == #players + 1 then
                 term.clearLine()
                 term.setCursorPos(1,ySize)
@@ -283,23 +266,19 @@ function general()
                 term.setTextColor(colours.yellow)
                 midPrint("Press <enter> key to start quiz", true)
             end
-            repeat
-                local event, key = os.pullEvent()
-                if event == "key" then
-                    if key == keys.up then
-                        sel = sel - 1
-                    elseif key == keys.down then
-                        sel = sel + 1
-                    elseif key == keys.tab then
-
-                    elseif key == keys.enter then
-                        break
-                    end
+            local event, key = os.pullEvent()
+            if event == "key" then
+                if key == keys.up then
+                    sel = sel - 1
+                elseif key == keys.down then
+                    sel = sel + 1
+                elseif key == keys.enter or key == keys.space then
+                    break
                 end
-            until event == "key"
+            end
         end
         -- Gets the player now
-        if sel == #players + 1 then return end
+        if sel == #players + 1 then break end
         if generals[players[sel]] == true then
             -- Recap all the answers!
             term.clear()
@@ -311,6 +290,9 @@ function general()
             generals[players[sel]] = true
             current = players[sel]
         end
+        term.clear()
+        term.setCursorPos(1,1)
+        print("Press <any key> to return")
         os.pullEvent("key")
     end
 end
