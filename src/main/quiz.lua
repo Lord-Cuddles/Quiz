@@ -218,7 +218,23 @@ function general()
             midPrint("*  *  *  *  *  *  *  *  *  *")
             print()
             term.setTextColor(colours.yellow)
+            term.setCursorPos(1,5)
             for p = 1, #players do
+                local suffix = ""
+                if generals[players[p]] == true then
+                    if sel == p then
+                        term.setTextColor(colours.red)
+                    else
+                        term.setTextColor(colours.grey)
+                    end
+                    suffix = " (Complete)"
+                elseif sel == p then
+                    term.setTextColor(colours.green)
+                else
+                    term.setTextColor(colours.white)
+                end
+                
+                print("test")
                 --[[local suffix = ""
                 if generals[players[p] ] == true then
                     if sel == p then
