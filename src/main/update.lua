@@ -1,5 +1,5 @@
 
-updater_version = "1.1"
+updater_version = "1.1.1"
 args = {...}
 term.clear()
 
@@ -8,6 +8,9 @@ dir = "quiz.lua"
 if args[1] == "updater" then
     url = "update.lua"
     dir = "update.lua"
+elseif args[1] == "startup" then
+    url = "startup.lua"
+    dir = "startup"
 end
 term.setTextColor(colours.lightGrey)
 
@@ -95,7 +98,7 @@ if response then
     midPrint("Press <any key> to continue", true)
     os.pullEvent("key")
     
-    shell.run("quiz.lua")
+    os.reboot()
     
 else
     
