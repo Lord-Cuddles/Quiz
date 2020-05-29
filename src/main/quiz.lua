@@ -263,25 +263,25 @@ function general()
                 term.setCursorPos(1,ySize-2)
                 term.setTextColor(colours.grey)
                 ]]--
-                if sel == #players + 1 then
-                    term.clearLine()
-                    term.setCursorPos(1,ySize)
-                    term.clearLine()
-                    term.setTextColor(colours.grey)
-                    midPrint("Press <enter> key to leave menu", true)
-                elseif generals[players[sel] ] == true then
-                    term.clearLine()
-                    midPrint(players[sel].." has played already!")
-                    term.setCursorPos(1,ySize)
-                    term.clearLine()
-                    term.setTextColor(colours.lightBlue)
-                    midPrint("Press <enter> key to recap quiz", true)
-                else
-                    term.setCursorPos(1,ySize)
-                    term.clearLine()
-                    term.setTextColor(colours.yellow)
-                    midPrint("Press <enter> key to start quiz", true)
-                end
+            end
+            if sel == #players + 1 then
+                term.clearLine()
+                term.setCursorPos(1,ySize)
+                term.clearLine()
+                term.setTextColor(colours.grey)
+                midPrint("Press <enter> key to leave menu", true)
+            elseif generals[players[sel] ] == true then
+                term.clearLine()
+                midPrint(players[sel].." has played already!")
+                term.setCursorPos(1,ySize)
+                term.clearLine()
+                term.setTextColor(colours.lightBlue)
+                midPrint("Press <enter> key to recap quiz", true)
+            else
+                term.setCursorPos(1,ySize)
+                term.clearLine()
+                term.setTextColor(colours.yellow)
+                midPrint("Press <enter> key to start quiz", true)
             end
             repeat
                 local event, key = os.pullEvent()
