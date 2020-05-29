@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 32"
+version = "1.0 alpha 33"
 args = {...}
 if args[1] == "version" then
     return version
@@ -157,8 +157,8 @@ function askQuestion(quizname, qid, q, a, p)
         print()
         term.setTextColor(colours.grey)
         term.setCursorPos(1,ySize-1)
-        print("Press <enter> key for correct answer")
-        print("Press <backspace> key for wrong answer")
+        midPrint("Press <enter> key if correct")
+        midPrint("Press <backspace> key if incorrect", true)
         local event, key = os.pullEvent("key")
         if key == keys.enter then
             return q.."|"..a.."|true"
@@ -168,7 +168,7 @@ function askQuestion(quizname, qid, q, a, p)
     end
 end
 
-local response = askQuestion("General Knowledge", 1, "What is the capital city of the United Kingdom?", "London", "George")
+local response = askQuestion("General Knowledge", 1, "What is the capital city of the United Kingdom", "London", "George")
 print(response)
 os.pullEvent("mouse_click")
 
