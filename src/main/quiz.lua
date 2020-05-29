@@ -97,8 +97,15 @@ function screenSelect()
         end
         local shift_held = false
         local event, key = os.pullEvent()
+        if event == "key_up" then
+            if key == keys.leftShift then
+                shift_held = false
+            end
+        end
         if event == "key" then
-            if key == keys.up then
+            if key == keys.leftShift then
+                shift_held = true
+            elseif key == keys.up then
                 sel = sel - 1
             elseif key == keys.down then
                 sel = sel + 1
