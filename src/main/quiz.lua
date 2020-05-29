@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 36"
+version = "1.0 alpha 37"
 args = {...}
 if args[1] == "version" then
     return version
@@ -18,7 +18,7 @@ players = {
     "Joe"
 }
 
-score = {
+scores = {
     Tom=0, 
     Jonny=0, 
     Joe=0
@@ -315,7 +315,7 @@ function showLog(topic, logtable, index)
     print(a)
 end
 
-function scores()
+function getscores()
     term.clear()
     term.setCursorPos(1,1)
     term.setBackgroundColor(colours.orange)
@@ -333,7 +333,7 @@ function scores()
         term.setTextColor(colours.lightGrey)
         write(": ")
         term.setTextColor(colours.white)
-        print(score[p].." points")
+        print(scores[p].." points")
         print()
     end
 end
@@ -350,7 +350,7 @@ function menu()
         elseif sel >= 2 and sel <= 4 then
             -- Specialist rounds!
         elseif sel == 5 then
-            scores()
+            getscores()
         elseif sel == 6 then
             -- Recap logs
         elseif sel == 7 then
