@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 39"
+version = "1.0 alpha 40"
 args = {...}
 if args[1] == "version" then
     return version
@@ -206,6 +206,7 @@ function general()
         while true do
             if sel < 1 then sel = #players + 1 end
             if sel > #players + 1 then sel = 1 end
+            term.clear()
             term.setCursorPos(1,1)
             term.setBackgroundColor(colours.orange)
             term.setTextColor(colours.black)
@@ -266,18 +267,20 @@ function general()
                     midPrint("Press <enter> key to start quiz", true)
                 end
             end
+            repeat
             local event, key = os.pullEvent()
-            if event == "key" then
-                if key == keys.up then
-                    sel = sel - 1
-                elseif key == keys.down then
-                    sel = sel + 1
-                elseif key == keys.tab then
-                    
-                elseif key == keys.enter then
-                    break
+                if event == "key" then
+                    if key == keys.up then
+                        sel = sel - 1
+                    elseif key == keys.down then
+                        sel = sel + 1
+                    elseif key == keys.tab then
+
+                    elseif key == keys.enter then
+                        break
+                    end
                 end
-            end
+            until event == "key"
         end
         -- Gets the player now
         if sel == #players + 1 then return end
