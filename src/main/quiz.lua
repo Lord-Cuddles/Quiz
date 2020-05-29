@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 27"
+version = "1.0 alpha 28"
 args = {...}
 if args[1] == "version" then
     return version
@@ -239,6 +239,8 @@ function menu()
         term.clear()
         term.setCursorPos(1,1)
         local sel = screenSelect()
+        term.clear()
+        term.setCursorPos(1,1)
         if sel == 1 then
             -- General knowledge!
         elseif sel >= 2 and sel <= 4 then
@@ -248,13 +250,11 @@ function menu()
         elseif sel == 6 then
             -- Recap logs
         elseif sel == 7 then
-            term.clear()
-            term.setCursorPos(1,1)
             break
         end
         os.pullEvent("char")
     end
-    return
+    shell.resolve()
 end
 
 menu()
