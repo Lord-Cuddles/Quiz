@@ -105,7 +105,7 @@ function screenSelect()
             term.clear()
             term.setCursorPos(1,1)
             write("> ")
-            return
+            return 255
         end
     end
 end
@@ -216,8 +216,6 @@ end
 
 function menu()
     while true do
-        term.clear()
-        term.setCursorPos(1,1)
         local sel = screenSelect()
         term.clear()
         term.setCursorPos(1,1)
@@ -232,7 +230,6 @@ function menu()
         elseif sel == 7 then
             term.clear()
             term.setCursorPos(1,1)
-            write("> ")
             break
         end
         os.pullEvent("char")
