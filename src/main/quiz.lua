@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 21"
+version = "1.0 alpha 22"
 args = {...}
 if args[1] == "version" then
     return version
@@ -135,9 +135,11 @@ end
 
 function addLog(logtable, question, answer, correct)
     if not type(logtable) == "table" then
-        error("Missing a log table") 
+        print("Missing a log table")
+        logtable = {}
     end
-    logtable[#logtab1e] = question.."|"..answer.."|"..tostring(correct)
+    logtable[#logtable+1] = question.."|"..answer.."|"..tostring(correct)
+    return logtable
 end
 
 function logHeading(title, entry, entries)
@@ -178,10 +180,13 @@ function showLog(topic, logtable, index)
     end
 end
 
-example_log = {}
-addLog(example_log, "What is your name", "George", true)
+local example_log = {}
+print(type(example_log))
+os.pullEvent("char")
+example_log = addLog(example_log, "What is your name", "George", true)
+print(type(example_log))
 showLog("Test", example_log, 1)
-or.pullEvent("char")
+os.pullEvent("char")
 
 function general()
     
