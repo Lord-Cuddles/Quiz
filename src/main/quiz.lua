@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 24"
+version = "1.0 alpha 25"
 args = {...}
 if args[1] == "version" then
     return version
@@ -40,7 +40,7 @@ function screenSelect()
     term.setTextColor(colours.black)
     term.setBackgroundColor(colours.orange)
     term.clearLine()
-    midPrint("Select Mode")
+    midPrint("Select Mode | Version: "..version)
     term.setBackgroundColor(colours.black)
     term.setTextColor(colours.grey)
     print()
@@ -89,23 +89,35 @@ function screenSelect()
         midPrint("Leave Game")
         print()
         term.setTextColor(colours.grey)
-        midPrint("Press <tab> to force reinstall * "..version, true)
-        local event, key = os.pullEvent("key")
-        if key == keys.up then
-            sel = sel - 1
-        elseif key == keys.down then
-            sel = sel + 1
-        elseif key == keys.enter then
-            return sel
-        elseif key == keys.tab then
-            term.setTextColor(colours.white)
-            term.setCursorPos(1,1)
-            term.clear()
-            shell.run("update.lua")
-            term.clear()
-            term.setCursorPos(1,1)
-            write("> ")
-            return 255
+        term.clearLine()
+        if shift_held then
+            midPrint("Press <shift+tab> to update updater.lua")
+        else
+            midPrint("Press <tab> to update quiz.lua")
+        end
+        local shift_held = false
+        local event, key = os.pullEvent()
+        if event == "key" then
+            if key == keys.up then
+                sel = sel - 1
+            elseif key == keys.down then
+                sel = sel + 1
+            elseif key == keys.enter then
+                return sel
+            elseif key == keys.tab then
+                term.setTextColor(colours.white)
+                term.setCursorPos(1,1)
+                term.clear()
+                if shift_held then
+                    shell.run("update.lua updater")
+                else
+                    shell.run("update.lua")
+                end
+                term.clear()
+                term.setCursorPos(1,1)
+                write("> ")
+                return 255
+            end
         end
     end
 end
