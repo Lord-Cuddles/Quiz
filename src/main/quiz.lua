@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 37"
+version = "1.0 alpha 38"
 args = {...}
 if args[1] == "version" then
     return version
@@ -199,6 +199,7 @@ function general()
         while true do
             term.setCursorPos(1,1)
             term.setBackgroundColor(colours.orange)
+            term.setTextColor(colours.black)
             term.clearLine()
             midPrint("Who is playing now?")
 
@@ -227,6 +228,7 @@ function general()
                 write(": ")
                 term.setTextColor(colours.white)
                 print(scores[players[p]])
+                print()
             end
             local event, key = os.pullEvent()
             if event == "key" then
@@ -242,8 +244,8 @@ function general()
         -- Gets the player now
         term.clear()
         term.setCursorPos(1,1)
-        generals[player[sel]] = true
-        print(player[sel])
+        generals[players[sel]] = true
+        print(players[sel])
         os.pullEvent("char")
     end
 end
