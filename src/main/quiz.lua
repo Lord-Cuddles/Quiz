@@ -64,7 +64,7 @@ function screenSelect()
     midPrint("Select Mode | Version: "..version)
     term.setBackgroundColor(colours.black)
     term.setTextColor(colours.grey)
-    local shift_held, ctrl_held = false, false
+
     print()
     midPrint("*  *  *  *  *  *  *  *  *  *")
     sel = 1
@@ -211,17 +211,16 @@ function general()
             term.setBackgroundColor(colours.orange)
             term.setTextColor(colours.black)
             term.clearLine()
-            midPrint("Who is playing now?")
-
-            term.setCursorPos(1,3)
+            midPrint("Player Select")
+            print()
             term.setBackgroundColor(colours.black)
             term.setTextColor(colours.grey)
             midPrint("*  *  *  *  *  *  *  *  *  *")
             print()
             term.setTextColor(colours.yellow)
             for p = 1, #players do
-                local suffix = ""
-                if generals[players[p]] == true then
+                --[[local suffix = ""
+                if generals[players[p] ] == true then
                     if sel == p then
                         term.setTextColor(colours.red)
                     else
@@ -237,7 +236,7 @@ function general()
                 term.setTextColor(colours.lightGrey)
                 write(": ")
                 term.setTextColor(colours.white)
-                print(scores[players[p]])
+                print(scores[players[p] ])
                 print()
                 if sel == #players + 1 then
                     term.setTextColor(colours.white)
@@ -247,13 +246,14 @@ function general()
                 print("  Back to menu")
                 term.setCursorPos(1,ySize-2)
                 term.setTextColor(colours.grey)
+                ]]--
                 if sel == #players + 1 then
                     term.clearLine()
                     term.setCursorPos(1,ySize)
                     term.clearLine()
                     term.setTextColor(colours.grey)
                     midPrint("Press <enter> key to leave menu", true)
-                elseif generals[players[sel]] == true then
+                elseif generals[players[sel] ] == true then
                     term.clearLine()
                     midPrint(players[sel].." has played already!")
                     term.setCursorPos(1,ySize)
@@ -268,7 +268,7 @@ function general()
                 end
             end
             repeat
-            local event, key = os.pullEvent()
+                local event, key = os.pullEvent()
                 if event == "key" then
                     if key == keys.up then
                         sel = sel - 1
