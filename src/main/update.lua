@@ -1,7 +1,19 @@
 
+updater_version = "1.0"
+args = {...}
+
+url = "quiz.lua"
+dir = "quiz.lua"
+if args[1] == "updater" then
+    url = "update.lua"
+    dir = "update.lua"
+end
+print("Updater version "..updater_version)
+print("Starting download of "..dir)
+
 -- Error handling for checking 
 if http.checkURL(
-    "https://raw.githubusercontent.com/Lord-Cuddles/Quiz/master/src/main/quiz.lua"
+    "https://raw.githubusercontent.com/Lord-Cuddles/Quiz/master/src/main/"..url
 ) == false then
     print("Unable to connect to GitHub")
     return
@@ -9,7 +21,7 @@ end
 
 -- Download url here
 local response, err = http.get(
-    "https://raw.githubusercontent.com/Lord-Cuddles/Quiz/master/src/main/quiz.lua"
+    "https://raw.githubusercontent.com/Lord-Cuddles/Quiz/master/src/main/"..url
 )
 
 
@@ -21,28 +33,31 @@ if response then
     local file = fs.open("download.lua", "w")
     file.write(content)
     file.close()
-    if fs.exists("quiz.lua") then
-        local file = fs.open("quiz.lua", "r")
+    if fs.exists(dir) then
+        local file = fs.open(dir, "r")
         if file.readAll() == content then
-            print("Warning: No changes between versions, possibly discord cache")
+            term.setTextColor(colours.yellow)
+            print("Note: No changes between versions")
             os.pullEvent("char")
         end
     end
     
-    if fs.exists("old_quiz.lua") then
+    if fs.exists("old_quiz.lua") and dir == "quiz.lua" then
         fs.delete("old_quiz.lua")
     end
-    if fs.exists("quiz.lua") then
+    if fs.exists("quiz.lua") and dir == "quiz.lua" then
         fs.move("quiz.lua", "old_quiz.lua")
+    elseif fs.exists("update.lua") and dir == "update.lua" then
+        fs.delete("update.lua")
     end
     if fs.exists("download.lua") then
         term.setTextColor(colours.green)
         print("Installation completed successfully!")
-        fs.move("download.lua", "quiz.lua")
+        fs.move("download.lua", dir)
     else
         term.setTextColor(colours.red)
         print("Installation failed to complete!")
-        fs.move("old_quiz.lua", "quiz.lua")
+        fs.move("old_quiz.lua", dir)
     end
     
     term.setTextColor(colours.grey)
