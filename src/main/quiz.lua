@@ -236,9 +236,9 @@ end
 
 function menu()
     while true do
-        local sel = screenSelect()
         term.clear()
         term.setCursorPos(1,1)
+        local sel = screenSelect()
         if sel == 1 then
             -- General knowledge!
         elseif sel >= 2 and sel <= 4 then
