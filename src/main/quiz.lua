@@ -420,12 +420,12 @@ function menu()
             -- Specialist rounds!
         elseif sel == 5 then
             getscores()
+            os.pullEvent("key")
         elseif sel == 6 then
             -- Recap logs
         elseif sel == 7 then
             return
         end
-        os.pullEvent("char")
     end
 end
 menu()
