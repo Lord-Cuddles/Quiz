@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 33"
+version = "1.0 alpha 34"
 args = {...}
 if args[1] == "version" then
     return version
@@ -30,6 +30,12 @@ specialists = {
     Joe=false
 }
 
+logs = {
+    Tom={},
+    Jonny={},
+    Joe={}
+}
+
 function midPrint(text, writeInstead)
     local xSize, ySize = term.getSize()
     local xPos, yPos = term.getCursorPos()
@@ -46,7 +52,7 @@ function screenSelect()
     midPrint("Select Mode | Version: "..version)
     term.setBackgroundColor(colours.black)
     term.setTextColor(colours.grey)
-    local shift_held = false
+    local shift_held, ctrl_held = false, false
     print()
     midPrint("*  *  *  *  *  *  *  *  *  *")
     sel = 1
@@ -100,6 +106,8 @@ function screenSelect()
         term.clearLine()
         if shift_held then
             midPrint("Press <shift+tab> to update updater.lua", true)
+        elseif ctrl_held then
+            midPrint("Press <ctrl+tab> to update startup.lua", true)
         else
             midPrint("Press <tab> to update quiz.lua", true)
         end
@@ -107,11 +115,17 @@ function screenSelect()
         if event == "key_up" then
             if key == keys.leftShift then
                 shift_held = false
+            elseif key == keys.leftCtrl then
+                ctrl_held = false
             end
         end
         if event == "key" then
             if key == keys.leftShift then
                 shift_held = true
+                ctrl_held = false
+            elseif key == keys.leftCtrl then
+                shift_held = false
+                ctrl_held = true
             elseif key == keys.up then
                 sel = sel - 1
             elseif key == keys.down then
@@ -124,6 +138,8 @@ function screenSelect()
                 term.clear()
                 if shift_held then
                     shell.run("update.lua updater")
+                elseif ctrl_held then
+                    shell.run("update.lua startup")
                 else
                     shell.run("update.lua")
                 end
@@ -287,11 +303,13 @@ function menu()
         elseif sel == 6 then
             -- Recap logs
         elseif sel == 7 then
-            break
+            return
         end
         os.pullEvent("char")
     end
-    shell.resolve()
 end
 
 menu()
+term.clear()
+term.setCursorPos(1,1)
+print("Exited to terminal")
