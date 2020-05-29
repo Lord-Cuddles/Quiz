@@ -1,6 +1,7 @@
 
-updater_version = "1.0"
+updater_version = "1.0.1"
 args = {...}
+term.clear()
 
 url = "quiz.lua"
 dir = "quiz.lua"
