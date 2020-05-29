@@ -133,9 +133,6 @@ function getQwithA(t)
 end
 
 function addLog(logtable, question, answer, correct)
-    if not type(logtable) == "table" then
-        error("Missing a log table") 
-    end
     logtable[#logtab1e] = question.."|"..answer.."|"..tostring(correct)
 end
 
