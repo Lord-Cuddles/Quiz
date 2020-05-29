@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 38"
+version = "1.0 alpha 39"
 args = {...}
 if args[1] == "version" then
     return version
@@ -36,9 +36,16 @@ generals = {
 }
 
 logs = {
-    Tom={},
-    Jonny={},
-    Joe={}
+    sp={
+        Tom={},
+        Jonny={},
+        Joe={}
+    },
+    gk={
+        Tom={},
+        Jonny={},
+        Joe={}
+    }
 }
 
 function midPrint(text, writeInstead)
@@ -98,14 +105,14 @@ function screenSelect()
         else
             term.setTextColor(colours.lightGrey)
         end
-        midPrint("Recap Rounds")
+        midPrint("Recap Logfile")
         print()
         if sel == #players + 4 then
             term.setTextColor(colours.white)
         else
             term.setTextColor(colours.lightGrey)
         end
-        midPrint("Leave Game")
+        midPrint("Quit Game")
         print()
         term.setTextColor(colours.grey)
         term.clearLine()
@@ -194,9 +201,11 @@ end
 
 function general()
     -- Work out the order from scores
-    for player = 1, #players do
+    while true do
         sel = 1
         while true do
+            if sel < 1 then sel = #players + 1 end
+            if sel > #players + 1 then sel = 1 end
             term.setCursorPos(1,1)
             term.setBackgroundColor(colours.orange)
             term.setTextColor(colours.black)
@@ -229,6 +238,33 @@ function general()
                 term.setTextColor(colours.white)
                 print(scores[players[p]])
                 print()
+                if sel == #players + 1 then
+                    term.setTextColor(colours.white)
+                else
+                    term.setTextColor(colours.grey)
+                end
+                print("  Back to menu")
+                term.setCursorPos(1,ySize-2)
+                term.setTextColor(colours.grey)
+                if sel == #players + 1 then
+                    term.clearLine()
+                    term.setCursorPos(1,ySize)
+                    term.clearLine()
+                    term.setTextColor(colours.grey)
+                    midPrint("Press <enter> key to leave menu", true)
+                elseif generals[players[sel]] == true then
+                    term.clearLine()
+                    midPrint(players[sel].." has played already!")
+                    term.setCursorPos(1,ySize)
+                    term.clearLine()
+                    term.setTextColor(colours.lightBlue)
+                    midPrint("Press <enter> key to recap quiz", true)
+                else
+                    term.setCursorPos(1,ySize)
+                    term.clearLine()
+                    term.setTextColor(colours.yellow)
+                    midPrint("Press <enter> key to start quiz", true)
+                end
             end
             local event, key = os.pullEvent()
             if event == "key" then
@@ -236,17 +272,45 @@ function general()
                     sel = sel - 1
                 elseif key == keys.down then
                     sel = sel + 1
+                elseif key == keys.tab then
+                    
                 elseif key == keys.enter then
                     break
                 end
             end
         end
         -- Gets the player now
-        term.clear()
-        term.setCursorPos(1,1)
-        generals[players[sel]] = true
-        print(players[sel])
-        os.pullEvent("char")
+        if sel == #players + 1 then return end
+        if generals[players[sel]] == true then
+            -- Recap all the answers!
+            term.clear()
+            term.setCursorPos(1,1)
+        else
+            -- Ask them some questions!
+            term.clear()
+            term.setCursorPos(1,1)
+            generals[players[sel]] = true
+            current = players[sel]
+        end
+        os.pullEvent("key")
+    end
+end
+
+function getGeneralKnowledge()
+    if fs.exists("general.quiz") then
+        local file = fs.open("general.quiz")
+        local quiz_content = {}
+        while true do
+            local line = file.readLine()
+            if not line then
+                break
+            end
+            table.insert(quiz_content, line)
+        end
+        table.sort(quiz_content)
+    else
+        print("Could not find quiz file")
+        return nil
     end
 end
 
