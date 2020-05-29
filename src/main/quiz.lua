@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 19"
+version = "1.0 alpha 20"
 args = {...}
 if args[1] == "version" then
     return version
@@ -37,18 +37,19 @@ function midPrint(text, writeInstead)
 end
 
 function screenSelect()
-    print()
-    print()
-    term.setTextColor(colours.orange)
+    term.setTextColor(colours.black)
+    term.setBackgroundColor(colours.orange)
+    term.clearLine()
     midPrint("Select Mode")
+    term.setBackgroundColor(colours.black)
     term.setTextColor(colours.grey)
     print()
     midPrint("*  *  *  *  *  *  *  *  *  *")
     sel = 1
     while true do
-        if sel < 1 then sel = #players + 3 end
-        if sel > #players + 3 then sel = 1 end
-        term.setCursorPos(1,7)
+        if sel < 1 then sel = #players + 4 end
+        if sel > #players + 4 then sel = 1 end
+        term.setCursorPos(1,5)
         term.setTextColor(colours.white)
         if sel == 1 then
             term.setTextColor(colours.white)
@@ -78,8 +79,14 @@ function screenSelect()
         else
             term.setTextColor(colours.lightGrey)
         end
-        midPrint("Exit (Loses Progress)")
+        midPrint("Recap Rounds")
         print()
+        if sel == #players + 4 then
+            term.setTextColor(colours.white)
+        else
+            term.setTextColor(colours.lightGrey)
+        end
+        midPrint("Leave Game")
         term.setTextColor(colours.grey)
         midPrint("Press <tab> to force reinstall * "..version, true)
         local event, key = os.pullEvent("key")
@@ -114,11 +121,66 @@ function getQandA(t)
     return q, a
 end
 
-local q, a = getQandA(example_question)
-print(q)
-print(a)
-print("click screen to continue")
-os.pullEvent("mouse_click")
+function getQwithA(t)
+    local sep = string.find(t, "|")
+    local q = string.sub(t, 1, sep-1)
+    local t = string.sub(t, sep+1)
+    local sep = string.find(t, "|")
+    local a = string.sub(t, 1, sep-1)
+    local t = string.sub(t, sep+1)
+    local c = string.sub(t, sep+1)
+    return q, a, c
+end
+
+function addLog(logtable, question, answer, correct)
+    if not type(logtable) = "table" then
+        error("Missing a log table") 
+    end
+    logtable[#logtab1e] = question.."|"..answer.."|"..tostring(correct)
+end
+
+function logHeading(title, entry, entries)
+    oldColor = term.getTextColor()
+    term.setTextColor(colours.yellow)
+    write("---- ")
+    term.setTextColor(colours.orange)
+    write(title or "Untitled")
+    term.setTextColor(colours.yellow)
+    write(" -- ")
+    term.setTextColor(colours.orange)
+    write("Entry ")
+    term.setTextColor(colours.red)
+    write(entry)
+    if entries then
+        term.setTextColor(colours.orange)
+        write("/")
+        term.setTextColor(colours.red)
+        write(entries)
+    end
+    term.setTextColor(colours.yellow)
+    print(" ----")
+end
+
+function showLog(topic, logtable, index)
+    local q, a, c = getQwithA(logtable[index])
+    logHeading(topic, index, #logtable)
+    term.setTextColor(colours.orange)
+    write("Question: ")
+    term.setTextColor(colours.white)
+    print(q)
+    term.setTextColor(colours.orange)
+    write("Answer: ")
+    if tostring(c) == "true" then
+        term.setTextColor(colours.green)
+    else
+        term.setTextColor(colours.red)
+    end
+end
+
+example_log = {}
+addLog(example_log, "What is your name", "George", true)
+showLog("Test", example_log, 1)
+or.pullEvent("char")
 
 function general()
     
