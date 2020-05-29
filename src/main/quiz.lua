@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 25"
+version = "1.0 alpha 26"
 args = {...}
 if args[1] == "version" then
     return version
@@ -91,9 +91,9 @@ function screenSelect()
         term.setTextColor(colours.grey)
         term.clearLine()
         if shift_held then
-            midPrint("Press <shift+tab> to update updater.lua")
+            midPrint("Press <shift+tab> to update updater.lua", true)
         else
-            midPrint("Press <tab> to update quiz.lua")
+            midPrint("Press <tab> to update quiz.lua", true)
         end
         local shift_held = false
         local event, key = os.pullEvent()
