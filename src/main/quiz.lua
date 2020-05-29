@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 35"
+version = "1.0 alpha 36"
 args = {...}
 if args[1] == "version" then
     return version
@@ -25,6 +25,11 @@ score = {
 }
 
 specialists = {
+    Tom=false,
+    Jonny=false,
+    Joe=false
+}
+generals = {
     Tom=false,
     Jonny=false,
     Joe=false
@@ -172,11 +177,14 @@ function askQuestion(quizname, qid, q, a, p)
         print(a)
         print()
         term.setTextColor(colours.grey)
-        term.setCursorPos(1,ySize-1)
+        term.setCursorPos(1,ySize-2)
         midPrint("Press <enter> key if correct")
-        midPrint("Press <backspace> key if incorrect", true)
+        midPrint("Press <backspace> key if incorrect")
+        midPrint("Press <tab> key to change who is answering")
         local event, key = os.pullEvent("key")
         if key == keys.enter then
+            if not scores[p] then scores[p] = 0 end
+            scores[p] = scores[p] + 1
             return q.."|"..a.."|true"
         elseif key == keys.backspace then
             return q.."|"..a.."|false"
@@ -184,9 +192,61 @@ function askQuestion(quizname, qid, q, a, p)
     end
 end
 
---[[local response = askQuestion("General Knowledge", 1, "What is the capital city of the United Kingdom", "London", "George")
-print(response)
-os.pullEvent("mouse_click")]]
+function general()
+    -- Work out the order from scores
+    for player = 1, #players do
+        sel = 1
+        while true do
+            term.setCursorPos(1,1)
+            term.setBackgroundColor(colours.orange)
+            term.clearLine()
+            midPrint("Who is playing now?")
+
+            term.setCursorPos(1,3)
+            term.setBackgroundColor(colours.black)
+            term.setTextColor(colours.grey)
+            midPrint("*  *  *  *  *  *  *  *  *  *")
+            print()
+            term.setTextColor(colours.yellow)
+            for p = 1, #players do
+                local suffix = ""
+                if generals[players[p]] == true then
+                    if sel == p then
+                        term.setTextColor(colours.red)
+                    else
+                        term.setTextColor(colours.grey)
+                    end
+                    suffix = " (done)"
+                elseif sel == p then
+                    term.setTextColor(colours.green)
+                else
+                    term.setTextColor(colours.white)
+                end
+                write("  "..players[p]..suffix)
+                term.setTextColor(colours.lightGrey)
+                write(": ")
+                term.setTextColor(colours.white)
+                print(scores[players[p]])
+            end
+            local event, key = os.pullEvent()
+            if event == "key" then
+                if key == keys.up then
+                    sel = sel - 1
+                elseif key == keys.down then
+                    sel = sel + 1
+                elseif key == keys.enter then
+                    break
+                end
+            end
+        end
+        -- Gets the player now
+        term.clear()
+        term.setCursorPos(1,1)
+        generals[player[sel]] = true
+        print(player[sel])
+        os.pullEvent("char")
+    end
+end
 
 function getQandA(t)
     local sep = string.find(t, "|")
@@ -255,15 +315,6 @@ function showLog(topic, logtable, index)
     print(a)
 end
 
---[[local example_log = {}
-example_log = addLog(example_log, "What is your name", "George", true)
-showLog("Test", example_log, 1)
-]]--
-
-function general()
-    
-end
-
 function scores()
     term.clear()
     term.setCursorPos(1,1)
@@ -295,7 +346,7 @@ function menu()
         term.clear()
         term.setCursorPos(1,1)
         if sel == 1 then
-            -- General knowledge!
+            general()
         elseif sel >= 2 and sel <= 4 then
             -- Specialist rounds!
         elseif sel == 5 then
@@ -308,8 +359,8 @@ function menu()
         os.pullEvent("char")
     end
 end
-
 menu()
 term.clear()
 term.setCursorPos(1,1)
+term.setTextColor(colours.white)
 print("Exited to terminal")
