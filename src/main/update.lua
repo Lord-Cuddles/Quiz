@@ -8,13 +8,17 @@ if args[1] == "updater" then
     url = "update.lua"
     dir = "update.lua"
 end
+term.setTextColor(colours.lightGrey)
 print("Updater version "..updater_version)
+print()
 print("Starting download of "..dir)
+print()
 
 -- Error handling for checking 
 if http.checkURL(
     "https://raw.githubusercontent.com/Lord-Cuddles/Quiz/master/src/main/"..url
 ) == false then
+    term.setTextColor(colours.red)
     print("Unable to connect to GitHub")
     return
 end
