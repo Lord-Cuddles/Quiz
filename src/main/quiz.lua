@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 17"
+version = "1.0 alpha 18"
 args = {...}
 if args[1] == "version" then
     return version
@@ -86,7 +86,7 @@ function screenSelect()
         elseif key == keys.tab then
             term.setCursorPos(1,1)
             term.clear()
-            shell.run("test")
+            shell.run("update.lua")
         end
     end
 end
