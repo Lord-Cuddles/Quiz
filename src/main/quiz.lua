@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 26"
+version = "1.0 alpha 27"
 args = {...}
 if args[1] == "version" then
     return version
@@ -37,12 +37,14 @@ function midPrint(text, writeInstead)
 end
 
 function screenSelect()
+    term.setCursorPos(1,1)
     term.setTextColor(colours.black)
     term.setBackgroundColor(colours.orange)
     term.clearLine()
     midPrint("Select Mode | Version: "..version)
     term.setBackgroundColor(colours.black)
     term.setTextColor(colours.grey)
+    local shift_held = false
     print()
     midPrint("*  *  *  *  *  *  *  *  *  *")
     sel = 1
@@ -95,7 +97,6 @@ function screenSelect()
         else
             midPrint("Press <tab> to update quiz.lua", true)
         end
-        local shift_held = false
         local event, key = os.pullEvent()
         if event == "key_up" then
             if key == keys.leftShift then
@@ -204,7 +205,7 @@ end
 local example_log = {}
 example_log = addLog(example_log, "What is your name", "George", true)
 showLog("Test", example_log, 1)
-os.pullEvent("char")
+os.pullEvent("mouse_click")
 
 function general()
     
