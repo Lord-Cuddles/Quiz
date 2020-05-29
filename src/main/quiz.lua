@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 23"
+version = "1.0 alpha 24"
 args = {...}
 if args[1] == "version" then
     return version
@@ -183,7 +183,6 @@ function showLog(topic, logtable, index)
 end
 
 local example_log = {}
-print(type(example_log))
 example_log = addLog(example_log, "What is your name", "George", true)
 showLog("Test", example_log, 1)
 os.pullEvent("char")
@@ -194,17 +193,23 @@ end
 
 function scores()
     term.clear()
-    term.setCursorPos(1,3)
-    term.setTextColor(colours.orange)
+    term.setCursorPos(1,1)
+    term.setBackgroundColor(colours.orange)
+    term.setTextColor(colours.black)
+    term.clearLine()
     midPrint("Current Score")
+    term.setBackgroundColor(colours.black)
     term.setTextColor(colours.grey)
     print()
     midPrint("*  *  *  *  *  *  *  *  *  *")
     print()
-    print()
-    term.setTextColor(colours.yellow)
     for k, p, s in pairs(players) do
-        midPrint("  "..p.." * "..score[p].." points")
+        term.setTextColor(colours.yellow)  
+        write("  "..p)
+        term.setTextColor(colours.lightGrey)
+        write(": ")
+        term.setTextColor(colours.white)
+        print(score[p].." points")
         print()
     end
 end
@@ -220,17 +225,19 @@ function menu()
             -- General knowledge!
         elseif sel >= 2 and sel <= 4 then
             -- Specialist rounds!
-            specialist()
         elseif sel == 5 then
             scores()
         elseif sel == 6 then
+            -- Recap logs
+        elseif sel == 7 then
             term.clear()
             term.setCursorPos(1,1)
             write("> ")
-            return
+            break
         end
         os.pullEvent("char")
     end
+    return
 end
 
 menu()
