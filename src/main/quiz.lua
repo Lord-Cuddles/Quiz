@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 18"
+version = "1.0 alpha 19"
 args = {...}
 if args[1] == "version" then
     return version
@@ -20,6 +20,12 @@ score = {
     Tom=0, 
     Jonny=0, 
     Joe=0
+}
+
+specialists = {
+    Tom=false,
+    Jonny=false,
+    Joe=false
 }
 
 function midPrint(text, writeInstead)
@@ -84,9 +90,14 @@ function screenSelect()
         elseif key == keys.enter then
             return sel
         elseif key == keys.tab then
+            term.setTextColor(colours.white)
             term.setCursorPos(1,1)
             term.clear()
             shell.run("update.lua")
+            term.clear()
+            term.setCursorPos(1,1)
+            write("> ")
+            return
         end
     end
 end
@@ -94,6 +105,20 @@ end
 function specialist()
     
 end
+
+example_question = "What is the capital of England|London"
+function getQandA(t)
+    local sep = string.find(t, "|")
+    local q = string.sub(t, 1, sep-1)
+    local a = string.sub(t, sep+1)
+    return q, a
+end
+
+local q, a = getQandA(example_question)
+print(q)
+print(a)
+print("click screen to continue")
+os.pullEvent("mouse_click")
 
 function general()
     
@@ -131,7 +156,10 @@ function menu()
         elseif sel == 5 then
             scores()
         elseif sel == 6 then
-            os.reboot()
+            term.clear()
+            term.setCursorPos(1,1)
+            write("> ")
+            return
         end
         os.pullEvent("char")
     end
