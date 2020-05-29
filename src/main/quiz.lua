@@ -122,6 +122,7 @@ function getQandA(t)
 end
 
 function getQwithA(t)
+    if not t then print("Error: missing table") error() end
     local sep = string.find(t, "|")
     local q = string.sub(t, 1, sep-1)
     local t = string.sub(t, sep+1)
@@ -133,6 +134,9 @@ function getQwithA(t)
 end
 
 function addLog(logtable, question, answer, correct)
+    if not type(logtable) == "table" then
+        error("Missing a log table") 
+    end
     logtable[#logtab1e] = question.."|"..answer.."|"..tostring(correct)
 end
 
