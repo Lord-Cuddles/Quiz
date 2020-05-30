@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 54"
+version = "1.0 alpha 55"
 args = {...}
 if args[1] == "version" then
     return version
@@ -336,6 +336,9 @@ function general()
                         break
                     elseif key == keys.pageDown or key == keys.down or key == keys.space or key == keys.enter then
                         e = e + 1
+                        if e - 1 == #logs.gk[ players[sel] ] then
+                            stop = true
+                        end
                         break
                     elseif key == keys["end"] or key == keys.home then
                         stop = true
