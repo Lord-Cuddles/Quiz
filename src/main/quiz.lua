@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 50"
+version = "1.0 alpha 51"
 args = {...}
 if args[1] == "version" then
     return version
@@ -341,7 +341,7 @@ function general()
                         stop = true
                         break
                     end
-                    if e >= #logs.gk[ players[sel] ] + 1 then
+                    if e >= (#logs.gk[ players[sel] ] + 1) then
                         stop = true
                         break
                     end
