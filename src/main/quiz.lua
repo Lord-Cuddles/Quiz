@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 41"
+version = "1.0 alpha 42"
 args = {...}
 if args[1] == "version" then
     return version
@@ -247,6 +247,7 @@ function general()
                 term.setTextColor(colours.lightGrey)
             end
             print("  Return to menu")
+            term.setCursorPos(1,ySize-2)
             if sel == #players + 1 then
                 term.clearLine()
                 term.setCursorPos(1,ySize)
@@ -272,6 +273,10 @@ function general()
                     sel = sel - 1
                 elseif key == keys.down then
                     sel = sel + 1
+                elseif key == keys.delete then
+                    if generals[players[sel]] == true then
+                        generals[players[sel]] = false
+                    end
                 elseif key == keys.enter or key == keys.space then
                     break
                 end
