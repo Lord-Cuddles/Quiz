@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 42"
+version = "1.0 alpha 43"
 args = {...}
 if args[1] == "version" then
     return version
@@ -105,7 +105,7 @@ function screenSelect()
         else
             term.setTextColor(colours.lightGrey)
         end
-        midPrint("Recap Logfile")
+        midPrint("Custom Quiz")
         print()
         if sel == #players + 4 then
             term.setTextColor(colours.white)
@@ -164,13 +164,20 @@ function screenSelect()
     end
 end
 
-function askQuestion(quizname, qid, q, a, p)
+function askQuestion(quizname, qid, q, a, p, remaining)
+    last_question = false
     while true do
         term.setCursorPos(1,1)
         term.setTextColor(colours.black)
         term.setBackgroundColor(colours.yellow)
         term.clearLine()
-        midPrint(p.."'s quiz: "..quizname)
+        if last_question == true then
+            midPrint(p.."'s quiz: "..quizname.." (Last question)")
+        elseif remaining then
+            midPrint(p.."'s quiz: "..quizname.." ("..remaining.." available)")
+        else
+            midPrint(p.."'s quiz: "..quizname)
+        end
         term.setBackgroundColor(colours.black)
         term.setCursorPos(1,3)
         term.setTextColor(colours.orange)
@@ -192,9 +199,15 @@ function askQuestion(quizname, qid, q, a, p)
         if key == keys.enter then
             if not scores[p] then scores[p] = 0 end
             scores[p] = scores[p] + 1
-            return q.."|"..a.."|true"
+            return last_question, 1, q.."|"..a.."|true"
         elseif key == keys.backspace then
-            return q.."|"..a.."|false"
+            return last_question, 0, q.."|"..a.."|false"
+        elseif key == keys.tab then
+            if last_question == true then
+                last_question = false
+            else
+                last_question = true
+            end
         end
     end
 end
@@ -227,7 +240,7 @@ function general()
                     else
                         term.setTextColor(colours.grey)
                     end
-                    suffix = " (Complete)"
+                    suffix = " (done)"
                 elseif sel == p then
                     term.setTextColor(colours.green)
                 else
@@ -252,7 +265,7 @@ function general()
                 term.clearLine()
                 term.setCursorPos(1,ySize)
                 term.clearLine()
-                term.setTextColor(colours.grey)
+                term.setTextColor(colours.lightGrey)
                 midPrint("Press <enter> key to leave menu", true)
             elseif generals[players[sel] ] == true then
                 term.clearLine()
@@ -274,8 +287,8 @@ function general()
                 elseif key == keys.down then
                     sel = sel + 1
                 elseif key == keys.delete then
-                    if generals[players[sel]] == true then
-                        generals[players[sel]] = false
+                    if generals[ players[sel] ] == true then
+                        generals[ players[sel] ] = false
                     end
                 elseif key == keys.enter or key == keys.space then
                     break
@@ -284,16 +297,33 @@ function general()
         end
         -- Gets the player now
         if sel == #players + 1 then break end
-        if generals[players[sel]] == true then
+        if generals[ players[sel] ] == true then
             -- Recap all the answers!
             term.clear()
             term.setCursorPos(1,1)
+            for e = 1, #logs.gk[ players[sel] ] do
+                showLog("General Knowledge", logs.gk[ players[sel] ], e)
+            end
         else
             -- Ask them some questions!
             term.clear()
             term.setCursorPos(1,1)
-            generals[players[sel]] = true
+            generals[ players[sel] ] = true
             current = players[sel]
+            index = 0
+            while true do
+                index = index + 1
+                qsel = math.random(1, #gk_questions)
+                t = gk_questions[qsel]
+                table.remove(gk_questions, qsel)
+                local q, a = getQandA(t)
+                local isLastQuestion, scoreModifier, logData = askQuestion("General Knowledge", index, q, a, players[sel], #gk_questions)
+                scores[current] = scores[current] + scoreModifier
+                table.insert(logs.gk[ players[sel ]], logData)
+                if isLastQuestion == true then
+                    break
+                end
+            end
         end
         term.clear()
         term.setCursorPos(1,1)
@@ -302,9 +332,28 @@ function general()
     end
 end
 
+function downloadQuiz(quizName, url)
+    local quizName = string.lower(quizName)
+    if not fs.isDir("quizzes") then fs.makeDir("quizzes") end
+    if fs.exists("quizzes/"..quizName..".quiz") then
+        fs.delete("quizzes/"..quizName..".quiz")
+    end
+    local response, err = http.get("https://pastebin.com/raw/"..url)
+    local content = response.readAll()
+    response.close()
+    local file = fs.open(quizName, "w")
+    file.write(content)
+    file.close()
+    return "quizzes/"..quizName..".quiz"
+end
+
 function getGeneralKnowledge()
-    if fs.exists("general.quiz") then
-        local file = fs.open("general.quiz")
+    -- Gets the quiz file from pastebin
+    if not fs.isDir("quizzes") then
+        fs.makeDir("quizzes")
+    end
+    if fs.exists("quizzes/general.quiz") then
+        local file = fs.open("quizzes/general.quiz")
         local quiz_content = {}
         while true do
             local line = file.readLine()
@@ -344,7 +393,7 @@ function addLog(logtable, question, answer, correct)
         print("Missing a log table")
         logtable = {}
     end
-    logtable[#logtable+1] = question.."|"..answer.."|"..tostring(correct)
+    logtable[ #logtable+1 ] = question.."|"..answer.."|"..tostring(correct)
     return logtable
 end
 
@@ -393,14 +442,14 @@ function getscores()
     term.setBackgroundColor(colours.orange)
     term.setTextColor(colours.black)
     term.clearLine()
-    midPrint("Current Score")
+    midPrint("Reload Quizzes")
     term.setBackgroundColor(colours.black)
     term.setTextColor(colours.grey)
     print()
     midPrint("*  *  *  *  *  *  *  *  *  *")
     print()
     for k, p, s in pairs(players) do
-        term.setTextColor(colours.yellow)  
+        term.setTextColor(colours.yellow)
         write("  "..p)
         term.setTextColor(colours.lightGrey)
         write(": ")
@@ -408,6 +457,8 @@ function getscores()
         print(scores[p].." points")
         print()
     end
+    term.setCursorPos(1,ySize)
+    midPrint("Press <any key> to continue", true)
 end
 
 function menu()
@@ -425,14 +476,42 @@ function menu()
             getscores()
             os.pullEvent("key")
         elseif sel == 6 then
-            -- Recap logs
+            -- Custom Quiz (Unimplemented)
         elseif sel == 7 then
             return
         end
     end
 end
+-- Don't download a new quiz file each time!
+if not fs.exists("quizzes/general.quiz") then
+    downloadQuiz("general", "mThvr3p0")
+end
+--[[
+if not fs.exists("quizzes/jonny.quiz") then
+    downloadQuiz("jonny", MISSINGURL)
+end
+
+if not fs.exists("quizzes/joe.quiz") then
+    downloadQuiz("joe", MISSINGURL)
+end
+
+if not fs.exists("quizzes/tom.quiz") then
+    downloadQuiz("tom", MISSINGURL)
+end
+]]
+gk_questions = getGeneralKnowledge()
 menu()
 term.clear()
 term.setCursorPos(1,1)
 term.setTextColor(colours.white)
-print("Exited to terminal")
+if scores.Jonny > scores.Joe and scores.Jonny > scores.Tom then
+    print("Well done to Jonny on winning the quiz!")
+elseif scores.Joe > scores.Jonny and scores.Joe > scores.Tom then
+    print("Well done to Joe for winning the quiz!")
+elseif scores.Tom > scores.Joe and scores.Tom > scores.Jonny then
+    print("Well done to Tom for winning the quiz!")
+elseif scores.Joe == 0 and scores.Tom == 0 and scores.Jonny == 0 then
+    print("Exited to terminal")
+else
+    print("Looks like a draw, how exciting!")
+end
