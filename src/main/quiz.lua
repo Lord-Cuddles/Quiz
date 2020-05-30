@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 45"
+version = "1.0 alpha 46"
 args = {...}
 if args[1] == "version" then
     return version
@@ -169,13 +169,17 @@ function askQuestion(quizname, qid, q, a, p, remaining)
     while true do
         term.setCursorPos(1,1)
         term.setTextColor(colours.black)
-        term.setBackgroundColor(colours.yellow)
-        term.clearLine()
         if last_question == true then
+            term.setBackgroundColor(colours.red)
+            term.clearLine()
             midPrint(p.."'s quiz: "..quizname.." (Last question)")
         elseif remaining then
+            term.setBackgroundColor(colours.yellow)
+            term.clearLine()
             midPrint(p.."'s quiz: "..quizname.." ("..remaining.." available)")
         else
+            term.setBackgroundColor(colours.yellow)
+            term.clearLine()
             midPrint(p.."'s quiz: "..quizname)
         end
         term.setBackgroundColor(colours.black)
@@ -192,13 +196,20 @@ function askQuestion(quizname, qid, q, a, p, remaining)
         print()
         term.setTextColor(colours.grey)
         term.setCursorPos(1,ySize-2)
+        term.clearLine()
         midPrint("Press <enter> key if correct")
+        term.clearLine()
         midPrint("Press <backspace> key if incorrect")
-        midPrint("Press <tab> key to change who is answering")
+        term.clearLine()
+        term.setTextColor(colours.aqua or colours.cyan)
+        if last_question then
+            midPrint("Press <tab> to set as final question", true)
+        else
+            midPrint("Press <tab> to unset as final question", true)
+        end
         local event, key = os.pullEvent("key")
         if key == keys.enter then
             if not scores[p] then scores[p] = 0 end
-            scores[p] = scores[p] + 1
             return last_question, 1, q.."|"..a.."|true"
         elseif key == keys.backspace then
             return last_question, 0, q.."|"..a.."|false"
@@ -208,6 +219,9 @@ function askQuestion(quizname, qid, q, a, p, remaining)
             else
                 last_question = true
             end
+        end
+        if remaining <= 1 then
+            last_question = true
         end
     end
 end
@@ -353,7 +367,7 @@ function getGeneralKnowledge()
         fs.makeDir("quizzes")
     end
     if fs.exists("quizzes/general.quiz") then
-        local file = fs.open("quizzes/general.quiz")
+        local file = fs.open("quizzes/general.quiz", "r")
         local quiz_content = {}
         while true do
             local line = file.readLine()
