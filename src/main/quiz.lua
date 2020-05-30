@@ -241,7 +241,7 @@ function specialist(person)
         local stop = false
         while true do
             term.clear()
-            showLog(logs.sp[person][e])
+            showLog(topics[person], logs.sp[person], e)
             while true do
                 local event, key = os.pullEvent("key")
                 if ( key == keys.pageUp or key == keys.up ) and e > 1 then
