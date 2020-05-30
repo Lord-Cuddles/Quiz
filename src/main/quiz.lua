@@ -409,6 +409,7 @@ function getQwithA(t)
     local sep = string.find(t, "|")
     local a = string.sub(t, 1, sep-1)
     local t = string.sub(t, sep+1)
+    local sep = string.find(t, "|")
     local c = string.sub(t, sep+1)
     return q, a, c
 end
@@ -419,6 +420,9 @@ function addLog(logtable, question, answer, correct)
         logtable = {}
     end
     logtable[ #logtable+1 ] = question.."|"..answer.."|"..tostring(correct)
+    print("Debug: created log file...")
+    print(logtable[#logtable])
+    os.pullEvent("char")
     return logtable
 end
 
@@ -445,6 +449,17 @@ function logHeading(title, entry, entries)
 end
 
 function showLog(topic, logtable, index)
+    local q, a, c = getQwithA(logtable[index])
+    term.setCursorPos(1,1)
+    term.setBackgroundColor(colours.aqua or colours.cyan)
+    term.setTextColor(colours.white)
+    term.clearLine()
+    midPrint("Showing Log History")
+    term.setCursorPos(1,3)
+    showLogOld(topic, logtable, index)
+end
+
+function showLogOld(topic, logtable, index)
     local q, a, c = getQwithA(logtable[index])
     logHeading(topic, index, #logtable)
     term.setTextColor(colours.orange)
