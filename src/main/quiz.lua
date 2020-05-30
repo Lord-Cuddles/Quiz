@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 48"
+version = "1.0 alpha 49"
 args = {...}
 if args[1] == "version" then
     return version
@@ -345,6 +345,7 @@ function general()
                 local q, a = getQandA(t)
                 term.clear()
                 local isLastQuestion, scoreModifier, logData = askQuestion("General Knowledge", index, q, a, players[sel], #gk_questions)
+                if #gk_questions == 0 then isLastQuestion = true end
                 scores[current] = scores[current] + scoreModifier
                 table.insert(logs.gk[ players[sel ]], logData)
                 if isLastQuestion == true then
