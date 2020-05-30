@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 44"
+version = "1.0 alpha 45"
 args = {...}
 if args[1] == "version" then
     return version
@@ -341,7 +341,7 @@ function downloadQuiz(quizName, url)
     local response, err = http.get("https://pastebin.com/raw/"..url)
     local content = response.readAll()
     response.close()
-    local file = fs.open(quizName, "w")
+    local file = fs.open("quizzes/"..quizName..".quiz", "w")
     file.write(content)
     file.close()
     return "quizzes/"..quizName..".quiz"
