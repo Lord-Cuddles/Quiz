@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 47"
+version = "1.0 alpha 48"
 args = {...}
 if args[1] == "version" then
     return version
@@ -24,11 +24,18 @@ scores = {
     Joe=0
 }
 
+topics={
+    Tom="Love Actually",
+    Jonny="DND Spells",
+    Joe="Liverpool 18-19"
+}
+
 specialists = {
     Tom=false,
     Jonny=false,
     Joe=false
 }
+
 generals = {
     Tom=false,
     Jonny=false,
@@ -51,7 +58,7 @@ logs = {
 function midPrint(text, writeInstead)
     local xSize, ySize = term.getSize()
     local xPos, yPos = term.getCursorPos()
-    term.setCursorPos((xSize/2)-(#text/2), yPos)
+    term.setCursorPos(((xSize/2)-(#text/2))+1, yPos)
     if writeInstead then write(text) else
     print(text) end
 end
@@ -226,6 +233,9 @@ function askQuestion(quizname, qid, q, a, p, remaining)
     end
 end
 
+function specialist(person)
+end
+
 function general()
     -- Work out the order from scores
     while true do
@@ -341,10 +351,6 @@ function general()
                 end
             end
         end
-        term.clear()
-        term.setCursorPos(1,1)
-        print("Press <any key> to return")
-        os.pullEvent("key")
     end
 end
 
@@ -503,19 +509,19 @@ end
 if not fs.exists("quizzes/general.quiz") then
     downloadQuiz("general", "mThvr3p0")
 end
---[[
+
 if not fs.exists("quizzes/jonny.quiz") then
-    downloadQuiz("jonny", MISSINGURL)
+    downloadQuiz("jonny", "ZwBgKGmS")
 end
 
 if not fs.exists("quizzes/joe.quiz") then
-    downloadQuiz("joe", MISSINGURL)
+    downloadQuiz("joe", "02vCX4kE")
 end
 
 if not fs.exists("quizzes/tom.quiz") then
-    downloadQuiz("tom", MISSINGURL)
+    downloadQuiz("tom", "TEJMu2bc")
 end
-]]
+
 gk_questions = getGeneralKnowledge()
 menu()
 term.clear()
