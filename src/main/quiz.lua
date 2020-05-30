@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 58"
+version = "1.0 beta 1"
 args = {...}
 if args[1] == "version" then
     return version
@@ -249,7 +249,7 @@ function specialist(person)
                     break
                 elseif key == keys.pageDown or key == keys.down or key == keys.space or key == keys.enter then
                     e = e + 1
-                    if e - 1 == #logs.sp[person][e] then
+                    if e - 1 == #logs.sp[person] then
                         stop = true
                     end
                     break
