@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 56"
+version = "1.0 alpha 57"
 args = {...}
 if args[1] == "version" then
     return version
@@ -235,13 +235,42 @@ end
 function specialist(person)
     if specialists[person] == true then
         -- This will scroll through the logs as in the general() function. Possibly merge these into one function in the future to properly unite quizzes?
+        term.clear()
+        term.setCursorPos(1,1)
+        local e = 1
+        local stop = false
+        while true do
+            term.clear()
+            showLog(logs.sp[person][e])
+            while true do
+                local event, key = os.pullEvent("key")
+                if ( key == keys.pageUp or key == keys.up ) and e > 1 then
+                    e = e - 1
+                    break
+                elseif key == keys.pageDown or key == keys.down or key == keys.space or key == keys.enter then
+                    e = e + 1
+                    if e - 1 == #logs.sp[person][e] then
+                        stop = true
+                    end
+                    break
+                elseif key == keys["end"] or key == keys.home then
+                    stop = true
+                    break
+                end
+                if e >= #logs.sp[person] + 1 then
+                    stop = true
+                    break
+                end
+            end
+            if stop == true then break end
+        end
     else
         -- This will ask specialist questions as below
         if sp[person] then
             term.clear()
             term.setCursorPos(1,1)
             specialists[person] = true
-            current = players[sel]
+            current = person
             index = 0
             while true do
                 index = index + 1
@@ -449,7 +478,7 @@ function getSubject(subject)
         fs.makeDir("quizzes")
     end
     if fs.exists("quizzes/"..subject..".quiz") then
-        local file = fs.open("quizzes/"..subject..".quiz")
+        local file = fs.open("quizzes/"..subject..".quiz", "r")
         local quiz_content = {}
         while true do
             local line = file.readLine()
