@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 55"
+version = "1.0 alpha 56"
 args = {...}
 if args[1] == "version" then
     return version
@@ -233,6 +233,35 @@ function askQuestion(quizname, qid, q, a, p, remaining)
 end
 
 function specialist(person)
+    if specialists[person] == true then
+        -- This will scroll through the logs as in the general() function. Possibly merge these into one function in the future to properly unite quizzes?
+    else
+        -- This will ask specialist questions as below
+        if sp[person] then
+            term.clear()
+            term.setCursorPos(1,1)
+            specialists[person] = true
+            current = players[sel]
+            index = 0
+            while true do
+                index = index + 1
+                qsel = math.random(1, #sp[person])
+                t = sp[person][qsel]
+                table.remove(sp[person], qsel)
+                local q, a = getQandA(t)
+                term.clear()
+                local isLastQuestion, scoreModifier, logData = askQuestion(topics[person], index, q, a, person, #sp[person])
+                if #sp[person] == 0 then isLastQuestion = true end
+                scores[current] = scores[current] + scoreModifier
+                table.insert( logs.sp[person], logData )
+                if isLastQuestion then
+                    break
+                end
+            end
+        else
+            return
+        end
+    end
 end
 
 function general()
@@ -410,7 +439,29 @@ function getGeneralKnowledge()
         table.sort(quiz_content)
         return quiz_content
     else
-        print("Could not find quiz file, download one please")
+        print("Error: Missing General Knowledge File")
+        os.pullEvent("key")
+    end
+end
+
+function getSubject(subject)
+    if not fs.isDir("quizzes") then
+        fs.makeDir("quizzes")
+    end
+    if fs.exists("quizzes/"..subject..".quiz") then
+        local file = fs.open("quizzes/"..subject..".quiz")
+        local quiz_content = {}
+        while true do
+            local line = file.readLine()
+            if not line then
+                break
+            end
+            table.insert(quiz_content, line)
+        end
+        table.sort(quiz_content)
+        return quiz_content
+    else
+        print("Error: Missing "..subject..".quiz File")
         os.pullEvent("key")
     end
 end
@@ -538,7 +589,7 @@ function menu()
         if sel == 1 then
             general()
         elseif sel >= 2 and sel <= 4 then
-            -- Specialist rounds!
+            specialist(players[sel-1])
         elseif sel == 5 then
             getscores()
             os.pullEvent("key")
@@ -567,6 +618,10 @@ if not fs.exists("quizzes/tom.quiz") then
 end
 
 gk_questions = getGeneralKnowledge()
+sp = {}
+for p = 1, #players do
+    sp[players[p]] = getSubject(players[p])
+end
 menu()
 term.clear()
 term.setCursorPos(1,1)
