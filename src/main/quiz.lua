@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 46"
+version = "1.0 alpha 47"
 args = {...}
 if args[1] == "version" then
     return version
@@ -203,9 +203,9 @@ function askQuestion(quizname, qid, q, a, p, remaining)
         term.clearLine()
         term.setTextColor(colours.aqua or colours.cyan)
         if last_question then
-            midPrint("Press <tab> to set as final question", true)
-        else
             midPrint("Press <tab> to unset as final question", true)
+        else
+            midPrint("Press <tab> to set as final question", true)
         end
         local event, key = os.pullEvent("key")
         if key == keys.enter then
@@ -316,6 +316,7 @@ function general()
             term.clear()
             term.setCursorPos(1,1)
             for e = 1, #logs.gk[ players[sel] ] do
+                term.clear()
                 showLog("General Knowledge", logs.gk[ players[sel] ], e)
             end
         else
@@ -331,6 +332,7 @@ function general()
                 t = gk_questions[qsel]
                 table.remove(gk_questions, qsel)
                 local q, a = getQandA(t)
+                term.clear()
                 local isLastQuestion, scoreModifier, logData = askQuestion("General Knowledge", index, q, a, players[sel], #gk_questions)
                 scores[current] = scores[current] + scoreModifier
                 table.insert(logs.gk[ players[sel ]], logData)
