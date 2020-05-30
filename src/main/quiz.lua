@@ -363,9 +363,10 @@ function getGeneralKnowledge()
             table.insert(quiz_content, line)
         end
         table.sort(quiz_content)
+        return quiz_content
     else
-        print("Could not find quiz file")
-        return nil
+        print("Could not find quiz file, download one please")
+        os.pullEvent("key")
     end
 end
 
