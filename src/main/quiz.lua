@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 52"
+version = "1.0 alpha 53"
 args = {...}
 if args[1] == "version" then
     return version
@@ -346,6 +346,7 @@ function general()
                         break
                     end
                 end
+                if stop == true break end
             end
         else
             -- Ask them some questions!
