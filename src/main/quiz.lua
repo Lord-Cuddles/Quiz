@@ -71,7 +71,6 @@ function screenSelect()
     midPrint("Select Mode | Version: "..version)
     term.setBackgroundColor(colours.black)
     term.setTextColor(colours.grey)
-
     print()
     midPrint("*  *  *  *  *  *  *  *  *  *")
     sel = 1
@@ -325,10 +324,28 @@ function general()
             -- Recap all the answers!
             term.clear()
             term.setCursorPos(1,1)
-            for e = 1, #logs.gk[ players[sel] ] do
+            local e = 1
+            local stop = false
+            while true do
                 term.clear()
                 showLog("General Knowledge", logs.gk[ players[sel] ], e)
-                os.pullEvent("key")
+                while true do
+                    local event, key = os.pullEvent("key")
+                    if ( key == keys.pageUp or key == keys.up ) and e > 1 then
+                        e = e - 1
+                        break
+                    elseif key == keys.pageDown or key == keys.down or key == keys.space or key == keys.enter then
+                        e = e + 1
+                        break
+                    elseif key == keys.end or key == keys.home then
+                        stop = true
+                        break
+                    end
+                    if e >= #logs.gk[ players[sel] ] + 1 then
+                        stop = true
+                        break
+                    end
+                end
             end
         else
             -- Ask them some questions!
@@ -469,13 +486,14 @@ function showLogOld(topic, logtable, index)
     write("Question: ")
     term.setTextColor(colours.white)
     print(q.."?")
+    print()
     term.setTextColor(colours.orange)
     write("Answer ")
     if tostring(c) == "true" then
-        write("(right):")
+        write("(right): ")
         term.setTextColor(colours.green)
     else
-        write("(wrong):")
+        write("(wrong): ")
         term.setTextColor(colours.red)
     end
     print(a)
