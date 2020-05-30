@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 alpha 49"
+version = "1.0 alpha 50"
 args = {...}
 if args[1] == "version" then
     return version
@@ -408,8 +408,6 @@ function getQwithA(t)
     local t = string.sub(t, sep+1)
     local sep = string.find(t, "|")
     local a = string.sub(t, 1, sep-1)
-    local t = string.sub(t, sep+1)
-    local sep = string.find(t, "|")
     local c = string.sub(t, sep+1)
     return q, a, c
 end
@@ -451,11 +449,16 @@ end
 function showLog(topic, logtable, index)
     local q, a, c = getQwithA(logtable[index])
     term.setCursorPos(1,1)
-    term.setBackgroundColor(colours.aqua or colours.cyan)
+    if tostring(c) == "true" then
+        term.setBackgroundColor(colours.green)
+    else
+        term.setBackgroundColor(colours.red)
+    end
     term.setTextColor(colours.white)
     term.clearLine()
     midPrint("Showing Log History")
     term.setCursorPos(1,3)
+    term.setBackgroundColor(colours.black)
     showLogOld(topic, logtable, index)
 end
 
@@ -467,10 +470,12 @@ function showLogOld(topic, logtable, index)
     term.setTextColor(colours.white)
     print(q.."?")
     term.setTextColor(colours.orange)
-    write("Answer: ")
+    write("Answer ")
     if tostring(c) == "true" then
+        write("(right):")
         term.setTextColor(colours.green)
     else
+        write("(wrong):")
         term.setTextColor(colours.red)
     end
     print(a)
