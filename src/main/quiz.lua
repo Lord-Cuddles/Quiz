@@ -328,6 +328,7 @@ function general()
             for e = 1, #logs.gk[ players[sel] ] do
                 term.clear()
                 showLog("General Knowledge", logs.gk[ players[sel] ], e)
+                os.pullEvent("key")
             end
         else
             -- Ask them some questions!
