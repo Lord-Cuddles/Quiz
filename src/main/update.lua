@@ -53,6 +53,7 @@ term.setBackgroundColor(theme.bg)
 print()
 term.setTextColor(theme.decor_1)
 midPrint("*  *  *  *  *  *  *  *  *  *")
+print()
 term.setTextColor(theme.sel)
 
 midPrint("Attempting download of "..dir)
