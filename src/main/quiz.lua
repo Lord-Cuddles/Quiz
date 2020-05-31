@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 beta 3"
+version = "1.0 beta 4"
 args = {...}
 if args[1] == "version" then
     return version
@@ -196,7 +196,7 @@ function askQuestion(quizname, qid, q, a, p, remaining)
     last_question = false
     while true do
         term.setCursorPos(1,1)
-        term.setTextColor(theme._head_fg)
+        term.setTextColor(theme.head_fg)
         if last_question == true then
             term.setBackgroundColor(theme.warn_bg)
             term.clearLine()
@@ -354,7 +354,7 @@ function general()
                 term.setTextColor(theme.decor_2)
                 write(": ")
                 term.setTextColor(theme.points)
-                print(scores[players[p]])
+                print(scores[players[p]].." points")
                 print()
             end
             if sel == #players + 1 then
