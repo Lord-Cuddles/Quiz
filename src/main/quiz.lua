@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 beta 1"
+version = "1.0 beta 2"
 args = {...}
 if args[1] == "version" then
     return version
@@ -55,6 +55,28 @@ logs = {
     }
 }
 
+theme = {
+    bg=colours.black,
+    sel=colours.green,
+    sel_done=colours.red,
+    desel=colours.white,
+    desel_done=colours.grey,
+    head_bg=colours.orange,
+    head_fg=colours.black,
+    warn_bg=colours.red,
+    foot=colours.grey,
+    foot_note1=colours.aqua,
+    foot_note2=colours.magenta,
+    right=colours.green,
+    wrong=colours.red
+    decor_1=colours.grey,
+    decor_2=colours.lightGrey,
+    text=colours.white,
+    title=colours.orange,
+    unanswered=colours.yellow,
+    points=colours.yellow
+}
+
 function midPrint(text, writeInstead)
     local xSize, ySize = term.getSize()
     local xPos, yPos = term.getCursorPos()
@@ -65,12 +87,12 @@ end
 
 function screenSelect()
     term.setCursorPos(1,1)
-    term.setTextColor(colours.black)
-    term.setBackgroundColor(colours.orange)
+    term.setTextColor(theme.head_fg)
+    term.setBackgroundColor(theme.head_bg)
     term.clearLine()
     midPrint("Select Mode | Version: "..version)
-    term.setBackgroundColor(colours.black)
-    term.setTextColor(colours.grey)
+    term.setBackgroundColor(theme.bg)
+    term.setTextColor(theme.decor_1)
     print()
     midPrint("*  *  *  *  *  *  *  *  *  *")
     sel = 1
@@ -78,19 +100,19 @@ function screenSelect()
         if sel < 1 then sel = #players + 4 end
         if sel > #players + 4 then sel = 1 end
         term.setCursorPos(1,5)
-        term.setTextColor(colours.white)
+        term.setTextColor(theme.text)
         if sel == 1 then
-            term.setTextColor(colours.white)
+            term.setTextColor(theme.sel)
         else
-            term.setTextColor(colours.lightGrey)
+            term.setTextColor(theme.desel)
         end
         midPrint("General Knowledge")
         print()
         for p = 1, #players do
             if sel == p + 1 then
-                term.setTextColor(colours.white)
+                term.setTextColor(theme.sel)
             else
-                term.setTextColor(colours.lightGrey)
+                term.setTextColor(theme.desel)
             end
             if specialists[players[p]] == true then
                 midPrint("[Done] "..players[p].."'s topic")
@@ -100,27 +122,27 @@ function screenSelect()
             print()
         end
         if sel == #players + 2 then
-            term.setTextColor(colours.white)
+            term.setTextColor(theme.sel)
         else
-            term.setTextColor(colours.lightGrey)
+            term.setTextColor(theme.desel)
         end
         midPrint("Current Score")
         print()
         if sel == #players + 3 then
-            term.setTextColor(colours.white)
+            term.setTextColor(theme.sel)
         else
-            term.setTextColor(colours.lightGrey)
+            term.setTextColor(theme.desel)
         end
         midPrint("Custom Quiz")
         print()
         if sel == #players + 4 then
-            term.setTextColor(colours.white)
+            term.setTextColor(theme.sel)
         else
-            term.setTextColor(colours.lightGrey)
+            term.setTextColor(theme.desel)
         end
         midPrint("Quit Game")
         print()
-        term.setTextColor(colours.grey)
+        term.setTextColor(theme.foot)
         term.clearLine()
         if shift_held then
             midPrint("Press <shift+tab> to update updater.lua", true)
@@ -151,7 +173,7 @@ function screenSelect()
             elseif key == keys.enter then
                 return sel
             elseif key == keys.tab then
-                term.setTextColor(colours.white)
+                term.setTextColor(theme.text)
                 term.setCursorPos(1,1)
                 term.clear()
                 if shift_held then
@@ -174,40 +196,40 @@ function askQuestion(quizname, qid, q, a, p, remaining)
     last_question = false
     while true do
         term.setCursorPos(1,1)
-        term.setTextColor(colours.black)
+        term.setTextColor(theme._head_fg)
         if last_question == true then
-            term.setBackgroundColor(colours.red)
+            term.setBackgroundColor(theme.warn_bg)
             term.clearLine()
             midPrint(p.."'s quiz: "..quizname.." (Last question)")
         elseif remaining then
-            term.setBackgroundColor(colours.yellow)
+            term.setBackgroundColor(theme.head_bg)
             term.clearLine()
             midPrint(p.."'s quiz: "..quizname.." ("..remaining.." available)")
         else
-            term.setBackgroundColor(colours.yellow)
+            term.setBackgroundColor(theme.head_bg)
             term.clearLine()
             midPrint(p.."'s quiz: "..quizname)
         end
-        term.setBackgroundColor(colours.black)
+        term.setBackgroundColor(theme.bg)
         term.setCursorPos(1,3)
-        term.setTextColor(colours.orange)
+        term.setTextColor(theme.title)
         write("Question "..qid..": ")
-        term.setTextColor(colours.white)
+        term.setTextColor(theme.text)
         print(q.."?")
         print()
-        term.setTextColor(colours.orange)
+        term.setTextColor(theme.title)
         write("Answer: ")
-        term.setTextColor(colours.yellow)
+        term.setTextColor(theme.unanswered)
         print(a)
         print()
-        term.setTextColor(colours.grey)
+        term.setTextColor(theme.foot)
         term.setCursorPos(1,ySize-2)
         term.clearLine()
         midPrint("Press <enter> key if correct")
         term.clearLine()
         midPrint("Press <backspace> key if incorrect")
         term.clearLine()
-        term.setTextColor(colours.aqua or colours.cyan)
+        term.setTextColor(theme.foot_note1)
         if last_question then
             midPrint("Press <tab> to unset as final question", true)
         else
@@ -302,43 +324,43 @@ function general()
             if sel > #players + 1 then sel = 1 end
             term.clear()
             term.setCursorPos(1,1)
-            term.setBackgroundColor(colours.orange)
-            term.setTextColor(colours.black)
+            term.setBackgroundColor(theme.head_bg)
+            term.setTextColor(theme.head_fg)
             term.clearLine()
             midPrint("Player Select")
             print()
-            term.setBackgroundColor(colours.black)
-            term.setTextColor(colours.grey)
+            term.setBackgroundColor(theme.bg)
+            term.setTextColor(theme.decor_1)
             midPrint("*  *  *  *  *  *  *  *  *  *")
             print()
-            term.setTextColor(colours.yellow)
+            term.setTextColor(theme.unanswered)
             term.setCursorPos(1,5)
             for p = 1, #players do
                 local suffix = ""
                 if generals[players[p]] == true then
                     if sel == p then
-                        term.setTextColor(colours.red)
+                        term.setTextColor(theme.sel_done)
                     else
-                        term.setTextColor(colours.grey)
+                        term.setTextColor(theme.desel_done)
                     end
                     suffix = " (done)"
                 elseif sel == p then
-                    term.setTextColor(colours.green)
+                    term.setTextColor(theme.sel)
                 else
-                    term.setTextColor(colours.white)
+                    term.setTextColor(theme.desel)
                 end
                 
                 write("  "..players[p]..suffix)
-                term.setTextColor(colours.lightGrey)
+                term.setTextColor(theme.decor_2)
                 write(": ")
-                term.setTextColor(colours.yellow)
+                term.setTextColor(theme.points)
                 print(scores[players[p]])
                 print()
             end
             if sel == #players + 1 then
-                term.setTextColor(colours.green)
+                term.setTextColor(theme.sel)
             else
-                term.setTextColor(colours.lightGrey)
+                term.setTextColor(theme.desel)
             end
             print("  Return to menu")
             term.setCursorPos(1,ySize-2)
@@ -346,19 +368,19 @@ function general()
                 term.clearLine()
                 term.setCursorPos(1,ySize)
                 term.clearLine()
-                term.setTextColor(colours.lightGrey)
+                term.setTextColor(theme.foot)
                 midPrint("Press <enter> key to leave menu", true)
             elseif generals[players[sel] ] == true then
                 term.clearLine()
                 midPrint(players[sel].." has played already!")
                 term.setCursorPos(1,ySize)
                 term.clearLine()
-                term.setTextColor(colours.lightBlue)
+                term.setTextColor(theme.foot_note1)
                 midPrint("Press <enter> key to recap quiz", true)
             else
                 term.setCursorPos(1,ySize)
                 term.clearLine()
-                term.setTextColor(colours.yellow)
+                term.setTextColor(theme.foot_note2)
                 midPrint("Press <enter> key to start quiz", true)
             end
             local event, key = os.pullEvent()
@@ -551,15 +573,18 @@ function showLog(topic, logtable, index)
     local q, a, c = getQwithA(logtable[index])
     term.setCursorPos(1,1)
     if tostring(c) == "true" then
-        term.setBackgroundColor(colours.green)
+        term.setBackgroundColor(theme.right)
     else
-        term.setBackgroundColor(colours.red)
+        term.setBackgroundColor(theme.wrong)
     end
-    term.setTextColor(colours.white)
+    term.setTextColor(theme.text)
     term.clearLine()
     midPrint("Showing Log History")
     term.setCursorPos(1,3)
-    term.setBackgroundColor(colours.black)
+    term.setTextColor(theme.decor_1)
+    term.setBackgroundColor(theme.bg)
+    midPrint("*  *  *  *  *  *  *  *  *  *")
+    term.setCursorPos(1,5)
     showLogOld(topic, logtable, index)
 end
 
@@ -586,21 +611,21 @@ end
 function getscores()
     term.clear()
     term.setCursorPos(1,1)
-    term.setBackgroundColor(colours.orange)
-    term.setTextColor(colours.black)
+    term.setBackgroundColor(theme.head_bg)
+    term.setTextColor(theme.head_fg)
     term.clearLine()
     midPrint("Reload Quizzes")
-    term.setBackgroundColor(colours.black)
-    term.setTextColor(colours.grey)
+    term.setBackgroundColor(theme.bg)
+    term.setTextColor(theme.decor_1)
     print()
     midPrint("*  *  *  *  *  *  *  *  *  *")
     print()
     for k, p, s in pairs(players) do
-        term.setTextColor(colours.yellow)
+        term.setTextColor(theme.desel)
         write("  "..p)
-        term.setTextColor(colours.lightGrey)
+        term.setTextColor(theme.decor_2)
         write(": ")
-        term.setTextColor(colours.white)
+        term.setTextColor(theme.points)
         print(scores[p].." points")
         print()
     end
@@ -654,7 +679,7 @@ end
 menu()
 term.clear()
 term.setCursorPos(1,1)
-term.setTextColor(colours.white)
+term.setTextColor(theme.text)
 if scores.Jonny > scores.Joe and scores.Jonny > scores.Tom then
     print("Well done to Jonny on winning the quiz!")
 elseif scores.Joe > scores.Jonny and scores.Joe > scores.Tom then
