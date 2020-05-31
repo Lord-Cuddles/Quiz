@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 beta 11"
+version = "1.0 beta 12"
 args = {...}
 if args[1] == "version" then
     return version
@@ -131,7 +131,7 @@ function screenSelect()
                 else
                     term.setTextColor(theme.desel)
                 end
-                midPrint(players[p]..": "..topics)
+                midPrint(players[p]..": "..topics[players[p]])
             end
             print()
         end
