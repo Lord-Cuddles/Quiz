@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 beta 2"
+version = "1.0 beta 3"
 args = {...}
 if args[1] == "version" then
     return version
@@ -68,7 +68,7 @@ theme = {
     foot_note1=colours.aqua,
     foot_note2=colours.magenta,
     right=colours.green,
-    wrong=colours.red
+    wrong=colours.red,
     decor_1=colours.grey,
     decor_2=colours.lightGrey,
     text=colours.white,
