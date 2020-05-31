@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 beta 9"
+version = "1.0 beta 10"
 args = {...}
 if args[1] == "version" then
     return version
@@ -142,12 +142,21 @@ function screenSelect()
         end
         midPrint("Current Score")
         print()
-        if sel == #players + 3 then
-            term.setTextColor(theme.sel)
+        if quizzes_updated then
+            if sel == #players + 3 then
+                term.setTextColor(theme.sel_done)
+            else
+                term.setTextColor(theme.desel_done)
+            end
+            midPrint("Refresh Quizzes (done)")
         else
-            term.setTextColor(theme.desel)
+            if sel == #players + 3 then
+                term.setTextColor(theme.sel)
+            else
+                term.setTextColor(theme.desel)
+            end
+            midPrint("Refresh Quizzes")
         end
-        midPrint("Custom Quiz")
         print()
         if sel == #players + 4 then
             term.setTextColor(theme.sel)
@@ -656,7 +665,7 @@ function getscores()
         else
             term.setTextColor(theme.desel)
         end
-        print("Return to Menu")
+        print("  Return to Menu")
         term.setCursorPos(1,ySize)
         local event, key = os.pullEvent("key")
         if key == keys.up then
@@ -674,6 +683,7 @@ function getscores()
 end
 
 function menu()
+    quizzes_updated = false
     while true do
         term.clear()
         term.setCursorPos(1,1)
@@ -687,13 +697,29 @@ function menu()
         elseif sel == 5 then
             getscores()
         elseif sel == 6 then
-            -- Custom Quiz (Unimplemented)
+            -- Update quizzes
+            fs.delete("quizzes/general.quiz")
+            downloadQuiz("general", "mThvr3p0")
+            fs.delete("quizzes/jonny.quiz")
+            downloadQuiz("jonny", "ZwBgKGmS")
+            fs.delete("quizzes/joe.quiz")
+            downloadQuiz("joe", "02vCX4kE")
+            fs.delete("quizzes/tom.quiz")
+            downloadQuiz("tom", "TEJMu2bc")
+            gk_questions = getGeneralKnowledge()
+            sp = {}
+            for p = 1, #players do
+                sp[players[p]] = getSubject(players[p])
+            end
+            quizzes_updated = true
         elseif sel == 7 then
             return
         end
     end
 end
+
 -- Don't download a new quiz file each time!
+
 if not fs.exists("quizzes/general.quiz") then
     downloadQuiz("general", "mThvr3p0")
 end
