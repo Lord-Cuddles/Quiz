@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 beta 7"
+version = "1.0 beta 8"
 args = {...}
 if args[1] == "version" then
     return version
@@ -638,9 +638,9 @@ function getscores()
             print()
         end
         if sel == #players + 1 then
-            term.setTextColor(colours.sel)
+            term.setTextColor(theme.sel)
         else
-            term.setTextColor(colours.desel)
+            term.setTextColor(theme.desel)
         end
         print("Return to Menu")
         term.setCursorPos(1,ySize)
