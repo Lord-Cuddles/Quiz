@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 beta 4"
+version = "1.0 beta 5"
 args = {...}
 if args[1] == "version" then
     return version
@@ -65,10 +65,10 @@ theme = {
     head_fg=colours.black,
     warn_bg=colours.red,
     foot=colours.grey,
-    foot_note1=colours.aqua,
+    foot_note1=colours.cyan,
     foot_note2=colours.magenta,
     right=colours.green,
-    wrong=colours.red,
+    wrong=colours.red
     decor_1=colours.grey,
     decor_2=colours.lightGrey,
     text=colours.white,
@@ -229,7 +229,7 @@ function askQuestion(quizname, qid, q, a, p, remaining)
         term.clearLine()
         midPrint("Press <backspace> key if incorrect")
         term.clearLine()
-        term.setTextColor(theme.foot_note1)
+        term.setTextColor(theme.foor_note1)
         if last_question then
             midPrint("Press <tab> to unset as final question", true)
         else
