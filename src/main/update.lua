@@ -1,5 +1,5 @@
 
-updater_version = "1.2"
+updater_version = "1.2.1"
 args = {...}
 theme = {
     bg=colours.black,
