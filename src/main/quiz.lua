@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 beta 6"
+version = "1.0 beta 7"
 args = {...}
 if args[1] == "version" then
     return version
@@ -609,28 +609,54 @@ function showLogOld(topic, logtable, index)
 end
 
 function getscores()
-    term.clear()
-    term.setCursorPos(1,1)
-    term.setBackgroundColor(theme.head_bg)
-    term.setTextColor(theme.head_fg)
-    term.clearLine()
-    midPrint("Reload Quizzes")
-    term.setBackgroundColor(theme.bg)
-    term.setTextColor(theme.decor_1)
-    print()
-    midPrint("*  *  *  *  *  *  *  *  *  *")
-    print()
-    for k, p, s in pairs(players) do
-        term.setTextColor(theme.desel)
-        write("  "..p)
-        term.setTextColor(theme.decor_2)
-        write(": ")
-        term.setTextColor(theme.points)
-        print(scores[p].." points")
+    local sel = 1
+    while true do
+        if sel < 1 then sel = #players + 1 end
+        if sel > #players + 1 then sel = 1 end
+        term.clear()
+        term.setCursorPos(1,1)
+        term.setBackgroundColor(theme.head_bg)
+        term.setTextColor(theme.head_fg)
+        term.clearLine()
+        midPrint("Current Scores, Use + and - to edit")
+        term.setBackgroundColor(theme.bg)
+        term.setTextColor(theme.decor_1)
         print()
+        midPrint("*  *  *  *  *  *  *  *  *  *")
+        print()
+        for k, p, s in pairs(players) do
+            if sel == k then
+                term.setTextColor(theme.sel)
+            else
+                term.setTextColor(theme.desel)
+            end
+            write("  "..p)
+            term.setTextColor(theme.decor_2)
+            write(": ")
+            term.setTextColor(theme.points)
+            print(scores[p].." points")
+            print()
+        end
+        if sel == #players + 1 then
+            term.setTextColor(colours.sel)
+        else
+            term.setTextColor(colours.desel)
+        end
+        print("Return to Menu")
+        term.setCursorPos(1,ySize)
+        local event, key = os.pullEvent("key")
+        if key == keys.up then
+            sel = sel - 1
+        elseif key == keys.down then
+            sel = sel + 1
+        elseif key == keys.enter and sel == #players + 1 then
+            break
+        elseif ( key == keys.equals or key == keys.numPadAdd ) and sel <= #players then
+            scores[players[sel]] = scores[players[sel]] + 1
+        elseif ( key == keys.minus or key == keys.numPadSubtract ) and sel <= #players then
+            scores[players[sel]] = scores[players[sel]] - 1
+        end
     end
-    term.setCursorPos(1,ySize)
-    midPrint("Press <any key> to continue", true)
 end
 
 function menu()
@@ -646,7 +672,6 @@ function menu()
             specialist(players[sel-1])
         elseif sel == 5 then
             getscores()
-            os.pullEvent("key")
         elseif sel == 6 then
             -- Custom Quiz (Unimplemented)
         elseif sel == 7 then
