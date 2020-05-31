@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 beta 8"
+version = "1.0 beta 9"
 args = {...}
 if args[1] == "version" then
     return version
@@ -101,22 +101,36 @@ function screenSelect()
         if sel > #players + 4 then sel = 1 end
         term.setCursorPos(1,5)
         term.setTextColor(theme.text)
-        if sel == 1 then
-            term.setTextColor(theme.sel)
+        if (generals.Tom == true and generals.Jonny == true and generals.Joe == true) then
+            if sel == 1 then
+                term.setTextColor(theme.sel_done)
+            else
+                term.setTextColor(theme.desel_done)
+            end
+            midPrint("General Knowledge (done)")
         else
-            term.setTextColor(theme.desel)
-        end
-        midPrint("General Knowledge")
-        print()
-        for p = 1, #players do
-            if sel == p + 1 then
+            if sel == 1 then
                 term.setTextColor(theme.sel)
             else
                 term.setTextColor(theme.desel)
             end
+            midPrint("General Knowledge")
+        end
+        print()
+        for p = 1, #players do
             if specialists[players[p]] == true then
-                midPrint("[Done] "..players[p].."'s topic")
+                if sel == p + 1 then
+                    term.setTextColor(theme.sel_done)
+                else
+                    term.setTextColor(theme.desel_done)
+                end
+                midPrint(players[p].."'s topic".." (done)")
             else
+                if sel == p + 1 then
+                    term.setTextColor(theme.sel)
+                else
+                    term.setTextColor(theme.desel)
+                end
                 midPrint(players[p].."'s topic")
             end
             print()
@@ -200,11 +214,11 @@ function askQuestion(quizname, qid, q, a, p, remaining)
         if last_question == true then
             term.setBackgroundColor(theme.warn_bg)
             term.clearLine()
-            midPrint(p.."'s quiz: "..quizname.." (Last question)")
+            midPrint(p.."'s quiz: "..quizname.." (Last Question)")
         elseif remaining then
             term.setBackgroundColor(theme.head_bg)
             term.clearLine()
-            midPrint(p.."'s quiz: "..quizname.." ("..remaining.." available)")
+            midPrint(p.."'s quiz: "..quizname.." ("..remaining.." left)")
         else
             term.setBackgroundColor(theme.head_bg)
             term.clearLine()
