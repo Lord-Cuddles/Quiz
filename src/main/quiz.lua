@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 beta 12"
+version = "1.0 pre 1"
 args = {...}
 if args[1] == "version" then
     return version
@@ -27,7 +27,7 @@ scores = {
 topics={
     Tom="Love Actually",
     Jonny="DND Spells",
-    Joe="Liverpool 18-19"
+    Joe="Liverpool 18/19"
 }
 
 specialists = {
@@ -124,7 +124,7 @@ function screenSelect()
                 else
                     term.setTextColor(theme.desel_done)
                 end
-                midPrint(players[p]..": "..topics.." (done)")
+                midPrint(players[p]..": "..topics[players[p]].." (done)")
             else
                 if sel == p + 1 then
                     term.setTextColor(theme.sel)
