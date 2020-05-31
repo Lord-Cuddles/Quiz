@@ -264,7 +264,7 @@ function askQuestion(quizname, qid, q, a, p, remaining)
             return last_question, 1, q.."|"..a.."|true"
         elseif key == keys.backspace then
             return last_question, 0, q.."|"..a.."|false"
-        elseif key == keys.tab then
+        elseif key == keys.tab or key == keys["end"] then
             if last_question == true then
                 last_question = false
             else
