@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0 pre 2"
+version = "1.0"
 args = {...}
 if args[1] == "version" then
     return version
@@ -119,6 +119,7 @@ function screenSelect()
         print()
         for p = 1, #players do
             if specialists[players[p]] == true then
+                term.clearLine()
                 if sel == p + 1 then
                     term.setTextColor(theme.sel_done)
                 else
@@ -193,6 +194,10 @@ function screenSelect()
                 sel = sel - 1
             elseif key == keys.down then
                 sel = sel + 1
+            elseif key == keys.delete then
+                if sel >= 2 or sel <= #players+1 then
+                    specialists[players[sel-1]] = false
+                end
             elseif key == keys.enter then
                 return sel
             elseif key == keys.tab then
