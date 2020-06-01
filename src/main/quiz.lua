@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0"
+version = "1.0.1"
 args = {...}
 if args[1] == "version" then
     return version
@@ -86,17 +86,17 @@ function midPrint(text, writeInstead)
 end
 
 function screenSelect()
-    term.setCursorPos(1,1)
-    term.setTextColor(theme.head_fg)
-    term.setBackgroundColor(theme.head_bg)
-    term.clearLine()
-    midPrint("Select Mode | Version: "..version)
-    term.setBackgroundColor(theme.bg)
-    term.setTextColor(theme.decor_1)
-    print()
-    midPrint("*  *  *  *  *  *  *  *  *  *")
     sel = 1
     while true do
+        term.setCursorPos(1,1)
+        term.setTextColor(theme.head_fg)
+        term.setBackgroundColor(theme.head_bg)
+        term.clearLine()
+        midPrint("Select Mode | Version: "..version)
+        term.setBackgroundColor(theme.bg)
+        term.setTextColor(theme.decor_1)
+        print()
+        midPrint("*  *  *  *  *  *  *  *  *  *")
         if sel < 1 then sel = #players + 4 end
         if sel > #players + 4 then sel = 1 end
         term.setCursorPos(1,5)
@@ -195,8 +195,10 @@ function screenSelect()
             elseif key == keys.down then
                 sel = sel + 1
             elseif key == keys.delete then
-                if sel >= 2 or sel <= #players+1 then
-                    specialists[players[sel-1]] = false
+                if sel >= 2 and sel <= #players+1 then
+                    if specialists[players[sel-1]] then
+                        specialists[players[sel-1]] = false
+                    end
                 end
             elseif key == keys.enter then
                 return sel
