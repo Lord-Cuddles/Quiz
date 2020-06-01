@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0.2"
+version = "1.0.3"
 args = {...}
 if args[1] == "version" then
     return version
@@ -151,14 +151,14 @@ function screenSelect()
             else
                 term.setTextColor(theme.desel_done)
             end
-            midPrint("Refresh Quizzes (done)")
+            midPrint("Reinstall Quizzes (done)")
         else
             if sel == #players + 3 then
                 term.setTextColor(theme.sel)
             else
                 term.setTextColor(theme.desel)
             end
-            midPrint("Refresh Quizzes")
+            midPrint("Reinstall Quizzes")
         end
         print()
         if sel == #players + 4 then
