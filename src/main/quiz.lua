@@ -1,5 +1,5 @@
 -- Scores
-version = "1.0.1"
+version = "1.0.2"
 args = {...}
 if args[1] == "version" then
     return version
@@ -114,6 +114,7 @@ function screenSelect()
             else
                 term.setTextColor(theme.desel)
             end
+            term.clearLine()
             midPrint("General Knowledge")
         end
         print()
@@ -127,6 +128,7 @@ function screenSelect()
                 end
                 midPrint(players[p]..": "..topics[players[p]].." (done)")
             else
+                term.clearLine()
                 if sel == p + 1 then
                     term.setTextColor(theme.sel)
                 else
@@ -325,17 +327,21 @@ function specialist(person)
             current = person
             index = 0
             while true do
-                index = index + 1
-                qsel = math.random(1, #sp[person])
-                t = sp[person][qsel]
-                table.remove(sp[person], qsel)
-                local q, a = getQandA(t)
-                term.clear()
-                local isLastQuestion, scoreModifier, logData = askQuestion(topics[person], index, q, a, person, #sp[person])
-                if #sp[person] == 0 then isLastQuestion = true end
-                scores[current] = scores[current] + scoreModifier
-                table.insert( logs.sp[person], logData )
-                if isLastQuestion then
+                if #sp[person] > 0 then
+                    index = index + 1
+                    qsel = math.random(1, #sp[person])
+                    t = sp[person][qsel]
+                    table.remove(sp[person], qsel)
+                    local q, a = getQandA(t)
+                    term.clear()
+                    local isLastQuestion, scoreModifier, logData = askQuestion(topics[person], index, q, a, person, #sp[person])
+                    if #sp[person] == 0 then isLastQuestion = true end
+                    scores[current] = scores[current] + scoreModifier
+                    table.insert( logs.sp[person], logData )
+                    if isLastQuestion then
+                        break
+                    end
+                else
                     break
                 end
             end
@@ -469,17 +475,21 @@ function general()
             current = players[sel]
             index = 0
             while true do
-                index = index + 1
-                qsel = math.random(1, #gk_questions)
-                t = gk_questions[qsel]
-                table.remove(gk_questions, qsel)
-                local q, a = getQandA(t)
-                term.clear()
-                local isLastQuestion, scoreModifier, logData = askQuestion("General Knowledge", index, q, a, players[sel], #gk_questions)
-                if #gk_questions == 0 then isLastQuestion = true end
-                scores[current] = scores[current] + scoreModifier
-                table.insert(logs.gk[ players[sel ]], logData)
-                if isLastQuestion == true then
+                if #gk_questions > 0 then
+                    index = index + 1
+                    qsel = math.random(1, #gk_questions)
+                    t = gk_questions[qsel]
+                    table.remove(gk_questions, qsel)
+                    local q, a = getQandA(t)
+                    term.clear()
+                    local isLastQuestion, scoreModifier, logData = askQuestion("General Knowledge", index, q, a, players[sel], #gk_questions)
+                    if #gk_questions == 0 then isLastQuestion = true end
+                    scores[current] = scores[current] + scoreModifier
+                    table.insert(logs.gk[ players[sel ]], logData)
+                    if isLastQuestion == true then
+                        break
+                    end
+                else
                     break
                 end
             end
